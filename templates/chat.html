@@ -430,6 +430,19 @@
             background-clip: text;
             text-fill-color: transparent;
         }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.4s ease-out forwards;
+        }
     </style>
 </head>
 <body>
@@ -556,7 +569,7 @@
         suggestionCards.forEach(function(card) {
             card.addEventListener('click', function() {
                 document.getElementById('chat-input').value = card.getAttribute('data-suggestion');
-                document.getElementById('chat-form').submit();
+                document.getElementById('chat-form').requestSubmit();
             });
         });
 
@@ -565,8 +578,12 @@
         if (chatForm) {
             chatForm.addEventListener('submit', function(e) {
                 var landing = document.getElementById('landing-content');
-                if (landing) {
-                    landing.style.display = 'none';
+                if (landing && window.getComputedStyle(landing).display !== 'none') {
+                    e.preventDefault();
+                    landing.classList.add('fade-out');
+                    landing.addEventListener('animationend', function() {
+                        chatForm.submit();
+                    }, { once: true });
                 }
             });
         }
@@ -598,7 +615,7 @@
             chatInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    document.getElementById('chat-form').submit();
+                    document.getElementById('chat-form').requestSubmit();
                 }
             });
         }
