@@ -196,8 +196,10 @@
         }
         .chat-row {
             display: flex;
-            align-items: flex-end;
+            align-items: flex-start;
             gap: 12px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .chat-row.user {
             justify-content: flex-end;
@@ -229,15 +231,16 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            flex-shrink: 0;
         }
         .avatar.user img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 50%;
         }
-        .avatar.bot {
-            background: #e0e7ff;
+        .avatar.bot svg {
+            width: 24px;
+            height: 24px;
         }
         .fade-out {
             opacity: 0;
@@ -502,21 +505,25 @@
             {% else %}
             <div class="chat-history-container" id="chat-history-container">
                 <div class="chat-history" id="chat-history">
-                    {% for msg in memory %}
-                        {% if "User:" in msg %}
-                            <div class="chat-row user">
-                                <div class="bubble user">{{ msg.replace('User: ', '') }}</div>
-                                <div class="avatar user">
-                                    <img src="{{ session['user']['picture'] }}" alt="User Avatar">
-                                </div>
+                    {% for message in memory %}
+                        {% if message.startswith('User: ') %}
+                        <div class="chat-row user">
+                            <div class="bubble user">{{ message[6:] }}</div>
+                            <div class="avatar user">
+                                <img src="{{ session['user']['picture'] }}" alt="User Avatar">
                             </div>
-                        {% elif "AI:" in msg %}
-                            <div class="chat-row ai">
-                                <div class="avatar bot">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="#3b82f6"/><path d="M7 14C7 14 8.5 16 12 16C15.5 16 17 14 17 14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 9.5C9.27614 9.5 9.5 9.27614 9.5 9C9.5 8.72386 9.27614 8.5 9 8.5C8.72386 8.5 8.5 8.72386 8.5 9C8.5 9.27614 8.72386 9.5 9 9.5Z" fill="white"/><path d="M15 9.5C15.2761 9.5 15.5 9.27614 15.5 9C15.5 8.72386 15.2761 8.5 15 8.5C14.7239 8.5 14.5 8.72386 14.5 9C14.5 9.27614 14.7239 9.5 15 9.5Z" fill="white"/></svg>
-                                </div>
-                                <div class="bubble ai">{{ msg.replace('AI: ', '') }}</div>
+                        </div>
+                        {% elif message.startswith('AI: ') %}
+                        <div class="chat-row ai">
+                            <div class="avatar bot">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                    <circle cx="12" cy="12" r="6" fill="#1e40af" fill-opacity="0.5"/>
+                                    <circle cx="12" cy="12" r="2" fill="white"/>
+                                </svg>
                             </div>
+                            <div class="bubble ai">{{ message[4:] }}</div>
+                        </div>
                         {% endif %}
                     {% endfor %}
                 </div>
