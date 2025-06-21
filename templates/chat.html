@@ -121,6 +121,7 @@
             padding: 8px;
             z-index: 100;
             display: none;
+            min-width: 160px;
         }
         .profile-dropdown a {
             display: block;
@@ -484,6 +485,7 @@
                     <img src="{{ session['user']['picture'] }}" alt="User Avatar">
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="{{ url_for('index') }}">Switch Agent</a>
                     <a href="/logout">Logout</a>
                 </div>
             </div>
