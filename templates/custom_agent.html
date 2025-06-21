@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dreamline - Create Your Agent</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --primary-glow: radial-gradient(circle at 25% 35%, #6366f1 0%, transparent 40%), radial-gradient(circle at 75% 65%, #a855f7 0%, transparent 40%);
+            --secondary-glow: radial-gradient(circle at 80% 20%, #ec4899 0%, transparent 35%);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --card-bg: rgba(22, 22, 22, 0.5);
+            --logo-gradient: linear-gradient(90deg, #a855f7, #ec4899);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --button-bg: #a855f7;
+            --button-hover-bg: #9333ea;
+        }
+
+        @keyframes move-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--bg) var(--primary-glow), var(--secondary-glow);
+            background-size: 300% 300%;
+            animation: move-glow 30s ease-in-out infinite;
+            filter: blur(100px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            z-index: 1;
+        }
+        
+        .creator-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+        
+        .creator-box h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(90deg, #d8b4fe, #a855f7, #f0abfc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .creator-box p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+            line-height: 1.6;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.4);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--button-bg);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="background-glow"></div>
+    <div class="container">
+        <div class="creator-box">
+            <h1>Create Your Agent</h1>
+            <p>Define the personality and expertise of your specialist AI. Be as detailed as you want.</p>
+            
+            <form method="POST" action="{{ url_for('custom_agent') }}">
+                <div class="form-group">
+                    <label for="agent_name">Agent Name</label>
+                    <input type="text" id="agent_name" name="agent_name" class="form-input" placeholder="e.g., 'Marketing Guru' or 'Stoic Philosopher'" value="{{ agent_name }}">
+                </div>
+                <div class="form-group">
+                    <label for="agent_prompt">Agent Prompt</label>
+                    <textarea id="agent_prompt" name="agent_prompt" class="form-textarea" placeholder="Describe how your agent should behave. What is its purpose? What is its personality?">{{ agent_prompt }}</textarea>
+                </div>
+                <button type="submit" class="submit-btn">Save & Start Chatting</button>
+            </form>
+            <a href="{{ url_for('index') }}" class="back-link">Back to Agent Selection</a>
+        </div>
+    </div>
+</body>
+</html> 

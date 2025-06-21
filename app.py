@@ -88,6 +88,18 @@ AGENTS = {
     }
 }
 
+DYNAMIC_AGENTS = AGENTS.copy()
+DYNAMIC_AGENTS['custom'] = {
+    "name": "Custom Agent",
+    "description": "Create your own specialist agent with a unique personality and purpose.",
+    "prompt": "", 
+    "suggestions": [
+        "What can you do?",
+        "How do I customize you?",
+        "Tell me a joke."
+    ]
+}
+
 app = Flask(__name__, static_folder='static')
 app.secret_key = os.environ.get('SECRET_KEY', 'supersecretkey')
 
@@ -149,16 +161,22 @@ def set_agent(agent_name):
     if "user" not in session:
         return redirect(url_for("login"))
     
-    # Set the agent
-    if agent_name in AGENTS:
+    user_id = get_or_create_user(session["user"].get("name", "User"))
+
+    if agent_name == 'custom':
+        conn = sqlite3.connect('dip_users.db')
+        c = conn.cursor()
+        c.execute("SELECT custom_prompt FROM users WHERE id = ?", (user_id,))
+        user_prompt = c.fetchone()
+        conn.close()
+        if not user_prompt or not user_prompt[0]:
+            return redirect(url_for('custom_agent'))
+
+    if agent_name in DYNAMIC_AGENTS:
         session['agent'] = agent_name
     else:
         session['agent'] = 'superhuman'
         
-    # Clear the history for a new conversation with the selected agent
-    user_info = session.get("user")
-    username = user_info.get("name", "User")
-    user_id = get_or_create_user(username)
     conn = sqlite3.connect('dip_users.db')
     c = conn.cursor()
     c.execute('DELETE FROM memories WHERE user_id = ?', (user_id,))
@@ -169,7 +187,33 @@ def set_agent(agent_name):
 
 @app.route("/")
 def index():
-    return render_template("landing.html", agents=AGENTS)
+    return render_template("landing.html", agents=DYNAMIC_AGENTS)
+
+@app.route("/custom-agent", methods=["GET", "POST"])
+def custom_agent():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    user_id = get_or_create_user(session["user"].get("name", "User"))
+    conn = sqlite3.connect('dip_users.db')
+    c = conn.cursor()
+
+    if request.method == "POST":
+        agent_name = request.form.get("agent_name", "Custom Agent")
+        agent_prompt = request.form.get("agent_prompt", "")
+        c.execute("UPDATE users SET custom_agent_name = ?, custom_prompt = ? WHERE id = ?", (agent_name, agent_prompt, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('set_agent', agent_name='custom'))
+
+    c.execute("SELECT custom_agent_name, custom_prompt FROM users WHERE id = ?", (user_id,))
+    custom_agent_data = c.fetchone()
+    conn.close()
+    
+    agent_name = custom_agent_data[0] if custom_agent_data and custom_agent_data[0] else ""
+    agent_prompt = custom_agent_data[1] if custom_agent_data and custom_agent_data[1] else ""
+    
+    return render_template("custom_agent.html", agent_name=agent_name, agent_prompt=agent_prompt)
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
@@ -183,7 +227,24 @@ def chat():
     
     # --- Agent Handling ---
     current_agent_name = session.get('agent', 'superhuman')
-    current_agent = AGENTS.get(current_agent_name, AGENTS['superhuman'])
+    
+    if current_agent_name == 'custom':
+        conn = sqlite3.connect('dip_users.db')
+        c = conn.cursor()
+        c.execute("SELECT custom_agent_name, custom_prompt FROM users WHERE id = ?", (user_id,))
+        custom_agent_data = c.fetchone()
+        conn.close()
+        
+        if not custom_agent_data or not custom_agent_data[1]:
+             return redirect(url_for('custom_agent'))
+        
+        current_agent = {
+            "name": custom_agent_data[0] or "Custom Agent",
+            "prompt": custom_agent_data[1],
+            "suggestions": DYNAMIC_AGENTS['custom']['suggestions']
+        }
+    else:
+        current_agent = DYNAMIC_AGENTS.get(current_agent_name, DYNAMIC_AGENTS['superhuman'])
 
     if request.method == "POST":
         user_input = request.form.get("message", "")
@@ -228,7 +289,7 @@ def chat():
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({'memory': memory})
 
-    return render_template("chat.html", username=username, memory=memory, agent=current_agent, agents=AGENTS)
+    return render_template("chat.html", username=username, memory=memory, agent=current_agent, agents=DYNAMIC_AGENTS)
 
 @app.route("/new_chat", methods=["POST", "GET"])
 def new_chat():

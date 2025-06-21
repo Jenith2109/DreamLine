@@ -18,6 +18,17 @@ def init_db():
             FOREIGN KEY(user_id) REFERENCES users(id)
         )
     ''')
+    
+    # Add custom_prompt and custom_agent_name columns if they don't exist
+    try:
+        c.execute('ALTER TABLE users ADD COLUMN custom_agent_name TEXT')
+    except sqlite3.OperationalError:
+        pass # Column already exists
+    try:
+        c.execute('ALTER TABLE users ADD COLUMN custom_prompt TEXT')
+    except sqlite3.OperationalError:
+        pass # Column already exists
+
     conn.commit()
     conn.close()
 
