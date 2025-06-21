@@ -16,10 +16,10 @@ load_dotenv()
 
 # --- AGENT CONFIGURATION ---
 AGENTS = {
-    "generalist": {
-        "name": "Generalist",
+    "superhuman": {
+        "name": "SuperHuman",
         "prompt": "You are a helpful general-purpose AI assistant. Be friendly, knowledgeable, and ready to help with a wide range of tasks.",
-        "description": "The default, all-purpose AI for any question.",
+        "description": "Your superhuman partner for everything.",
     },
     "creative_writer": {
         "name": "Creative Writer",
@@ -111,7 +111,7 @@ def set_agent(agent_name):
     if agent_name in AGENTS:
         session['agent'] = agent_name
     else:
-        session['agent'] = 'generalist'
+        session['agent'] = 'superhuman'
         
     # Clear the history for a new conversation with the selected agent
     user_info = session.get("user")
@@ -125,10 +125,14 @@ def set_agent(agent_name):
 
     return redirect(url_for('chat'))
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
+def index():
+    return render_template("landing.html", agents=AGENTS)
+
+@app.route("/chat", methods=["GET", "POST"])
 def chat():
     if "user" not in session:
-        return render_template("landing.html", agents=AGENTS)
+        return redirect(url_for("login"))
 
     user_info = session["user"]
     username = user_info.get('name', 'User')
@@ -136,8 +140,8 @@ def chat():
     memory = get_memory(user_id)
     
     # --- Agent Handling ---
-    current_agent_name = session.get('agent', 'generalist')
-    current_agent = AGENTS.get(current_agent_name, AGENTS['generalist'])
+    current_agent_name = session.get('agent', 'superhuman')
+    current_agent = AGENTS.get(current_agent_name, AGENTS['superhuman'])
 
     if request.method == "POST":
         user_input = request.form.get("message", "")
@@ -178,6 +182,9 @@ def chat():
             response = generate_response(ai_query, memory)
             save_message(user_id, f"AI: {response}")
             memory = get_memory(user_id) # Refresh memory
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'memory': memory})
 
     return render_template("chat.html", username=username, memory=memory, agent=current_agent, agents=AGENTS)
 
@@ -190,8 +197,8 @@ def new_chat():
     if not user_info:
         return redirect(url_for("login"))
 
-    # New chats from the UI button reset to the generalist agent
-    session['agent'] = 'generalist'
+    # New chats from the UI button reset to the superhuman agent
+    session['agent'] = 'superhuman'
 
     username = user_info.get("name", "User")
     user_id = get_or_create_user(username)
