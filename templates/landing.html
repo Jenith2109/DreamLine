@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dreamline - The Future of AI Assistance</title>
+    <title>Dreamline - Select Your AI Assistant</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0d0d0d">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -57,43 +57,79 @@
         }
 
         body {
-            font-family: 'Google Sans', sans-serif;
+            font-family: 'Inter', 'Roboto', sans-serif;
             margin: 0;
-            background-color: var(--background-color);
-            color: var(--on-surface-color);
+            background-color: #0d0d0d;
+            color: #e4e4e7;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             height: 100vh;
-            overflow: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            overflow-y: auto;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
-            padding: 2rem;
+            padding: 4rem 2rem;
             z-index: 1;
         }
 
         .title {
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: 2.5rem;
             font-weight: 700;
-            line-height: 1.1;
-            background: linear-gradient(180deg, #fff 70%, #a8a29e 100%);
+            background: -webkit-linear-gradient(45deg, #8b5cf6, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0;
+            margin: 0 0 1rem 0;
         }
 
         .subtitle {
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            color: var(--secondary-color);
-            margin: 1.5rem auto 2.5rem auto;
-            max-width: 500px;
+            font-size: 1.2rem;
+            color: #a1a1aa;
+            margin: 0 auto 3rem auto;
+            max-width: 600px;
             line-height: 1.6;
+        }
+        
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            justify-items: center;
+        }
+
+        .agent-card {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            padding: 1.5rem;
+            border-radius: 16px;
+            background: #18181b;
+            border: 1px solid #27272a;
+            text-decoration: none;
+            color: #e4e4e7;
+            transition: all 0.3s ease;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-5px);
+            border-color: #52525b;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .agent-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .agent-description {
+            font-size: 0.95rem;
+            color: #a1a1aa;
+            line-height: 1.5;
+            flex-grow: 1;
         }
 
         .login-button {
@@ -323,21 +359,18 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title loading">Meet your new AI companion.</h1>
-        <p class="subtitle loading">Dreamline streamlines your tasks, answers your questions, and helps you build amazing things.</p>
-        <a href="/login" class="login-button loading">
-            Get Started
-        </a>
-        <div class="avatar-strip loading">
-            <div class="avatar" style="--delay: 0.8s; background-color: #ef4444;"></div>
-            <div class="avatar" style="--delay: 0.9s; background-color: #3b82f6;"></div>
-            <div class="avatar" style="--delay: 1.0s; background-color: #22c55e;"></div>
-            <div class="avatar" style="--delay: 1.1s; background-color: #eab308;"></div>
-            <div class="avatar" style="--delay: 1.2s; background-color: #8b5cf6;"></div>
-            <div class="avatar" style="--delay: 1.3s; background-color: #f97316;"></div>
-            <div class="avatar" style="--delay: 1.4s; background-color: #14b8a6;"></div>
+        <h1 class="title">Choose Your Specialist</h1>
+        <p class="subtitle">Select from one of our finely-tuned AI agents, each designed for a specific task, or start with our versatile general-purpose assistant.</p>
+        
+        <div class="agent-grid">
+            {% for agent_key, agent_info in agents.items() %}
+            <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card">
+                <div class="agent-name">{{ agent_info.name }}</div>
+                <p class="agent-description">{{ agent_info.description }}</p>
+            </a>
+            {% endfor %}
         </div>
-        <p class="social-proof loading">Powering the world's most innovative minds.</p>
+
     </div>
     
     <script>

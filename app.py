@@ -14,6 +14,45 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# --- AGENT CONFIGURATION ---
+AGENTS = {
+    "generalist": {
+        "name": "Generalist",
+        "prompt": "You are a helpful general-purpose AI assistant. Be friendly, knowledgeable, and ready to help with a wide range of tasks.",
+        "description": "The default, all-purpose AI for any question.",
+    },
+    "creative_writer": {
+        "name": "Creative Writer",
+        "prompt": "You are a master storyteller and creative writer. Your purpose is to help users write poems, stories, marketing copy, and other creative texts. Always adopt a highly imaginative and descriptive tone.",
+        "description": "Your partner for stories, poems, and marketing copy.",
+    },
+    "code_assistant": {
+        "name": "Code Assistant",
+        "prompt": "You are an expert programmer and code assistant. Your goal is to help users write, debug, and understand code. Provide clear explanations and always format code snippets correctly in markdown.",
+        "description": "The expert for writing, debugging, and explaining code.",
+    },
+    "travel_planner": {
+        "name": "Travel Planner",
+        "prompt": "You are a knowledgeable travel agent. Your job is to create detailed itineraries, suggest destinations, and provide practical travel advice. Always be enthusiastic and helpful.",
+        "description": "Plan your next adventure with itineraries and advice.",
+    },
+    "career_coach": {
+        "name": "Career Coach",
+        "prompt": "You are a supportive and insightful career coach. You help users with resume writing, interview preparation, and career advice. Be encouraging and provide actionable tips.",
+        "description": "Get help with resumes, interview prep, and career advice.",
+    },
+    "chef": {
+        "name": "Chef",
+        "prompt": "You are a passionate chef and culinary expert. You provide recipes, create meal plans, and offer cooking guidance. Your tone should be warm and your instructions easy to follow.",
+        "description": "Discover new recipes, meal plans, and cooking tips.",
+    },
+    "fitness_trainer": {
+        "name": "Fitness Trainer",
+        "prompt": "You are a certified fitness trainer. Your role is to create workout plans, offer fitness advice, and motivate users to reach their health goals. Be energetic and knowledgeable.",
+        "description": "Your guide to workout plans and achieving fitness goals.",
+    }
+}
+
 app = Flask(__name__, static_folder='static')
 app.secret_key = os.environ.get('SECRET_KEY', 'supersecretkey')
 app.config.from_mapping(
@@ -60,17 +99,36 @@ def authorize():
 @app.route('/logout')
 def logout():
     session.pop('user', None)
+    session.pop('agent', None) # Clear agent on logout
     return redirect('/')
+
+@app.route("/agent/<agent_name>")
+def set_agent(agent_name):
+    if "user" not in session:
+        return redirect(url_for("login"))
+    
+    if agent_name in AGENTS:
+        session['agent'] = agent_name
+    else:
+        # Default to generalist if agent name is invalid
+        session['agent'] = 'generalist'
+        
+    # Start a new chat when an agent is selected
+    return new_chat(redirect_to_chat=False)
 
 @app.route("/", methods=["GET", "POST"])
 def chat():
     if "user" not in session:
-        return render_template("landing.html")
+        return render_template("landing.html", agents=AGENTS)
 
     user_info = session["user"]
     username = user_info.get('name', 'User')
     user_id = get_or_create_user(username)
     memory = get_memory(user_id)
+    
+    # --- Agent Handling ---
+    current_agent_name = session.get('agent', 'generalist')
+    current_agent = AGENTS.get(current_agent_name, AGENTS['generalist'])
 
     if request.method == "POST":
         user_input = request.form.get("message", "")
@@ -105,20 +163,26 @@ def chat():
 
         if user_input:
             save_message(user_id, f"User: {user_input}")
-            response = generate_response(user_input, memory)
+            # Prepend agent's system prompt to the AI query
+            system_prompt = current_agent['prompt']
+            ai_query = f"{system_prompt}\n\n{user_input}"
+            response = generate_response(ai_query, memory)
             save_message(user_id, f"AI: {response}")
             memory = get_memory(user_id) # Refresh memory
 
-    return render_template("chat.html", username=username, memory=memory)
+    return render_template("chat.html", username=username, memory=memory, agent=current_agent, agents=AGENTS)
 
-@app.route("/new_chat", methods=["POST"])
-def new_chat():
+@app.route("/new_chat", methods=["POST", "GET"])
+def new_chat(redirect_to_chat=True):
     if "user" not in session:
         return redirect(url_for("login"))
     
     user_info = session.get("user")
     if not user_info:
         return redirect(url_for("login"))
+
+    # By default, new chats reset to the generalist agent
+    session['agent'] = 'generalist'
 
     username = user_info.get("name", "User")
     user_id = get_or_create_user(username)
@@ -128,7 +192,10 @@ def new_chat():
     c.execute('DELETE FROM memories WHERE user_id = ?', (user_id,))
     conn.commit()
     conn.close()
-    return redirect(url_for("chat"))
+    
+    if redirect_to_chat:
+        return redirect(url_for("chat"))
+    return redirect(url_for('chat'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
