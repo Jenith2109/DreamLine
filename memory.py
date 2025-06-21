@@ -11,10 +11,10 @@ def save_message(user_id, message):
     conn.commit()
     conn.close()
 
-def get_memory(user_id):
+def get_memory(user_id, limit=5):
     conn = sqlite3.connect('dip_users.db')
     c = conn.cursor()
-    c.execute('SELECT message FROM memories WHERE user_id = ? ORDER BY id ASC', (user_id,))
-    memory = "\n".join([row[0] for row in c.fetchall()])
+    c.execute('SELECT message FROM memories WHERE user_id = ? ORDER BY id DESC LIMIT ?', (user_id, limit))
+    messages = [row[0] for row in c.fetchall()]
     conn.close()
-    return memory
+    return messages[::-1]  # Return in chronological order
