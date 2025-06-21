@@ -9,27 +9,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000;
-            --bg-light: #111;
-            --border: #222;
-            --text-light: #888;
-            --text-bright: #eee;
-            --gradient: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+            --bg: #000000;
+            --primary-glow: radial-gradient(circle at 25% 35%, #6366f1 0%, transparent 40%), radial-gradient(circle at 75% 65%, #a855f7 0%, transparent 40%);
+            --secondary-glow: radial-gradient(circle at 80% 20%, #ec4899 0%, transparent 35%);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --card-bg: rgba(22, 22, 22, 0.5);
+        }
+
+        @keyframes move-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
-            color: var(--text-bright);
+            color: var(--text-primary);
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .background-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--bg) var(--primary-glow), var(--secondary-glow);
+            background-size: 300% 300%;
+            animation: move-glow 30s ease-in-out infinite;
+            filter: blur(100px);
         }
 
         .container {
-            max-width: 1200px;
+            width: 100%;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 2rem;
+            z-index: 1;
         }
 
         header {
@@ -43,98 +68,106 @@
             font-size: 1.5rem;
             font-weight: 700;
         }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 0.75rem 1.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            text-decoration: none;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .cta-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
         .hero {
             text-align: center;
-            padding: 6rem 0;
+            padding: 4rem 0;
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 800;
             line-height: 1.2;
-            margin: 0 0 1rem 0;
-            background: var(--gradient);
+            margin: 0 auto 1.5rem auto;
+            max-width: 800px;
+            background: linear-gradient(90deg, #d8b4fe, #a855f7, #f0abfc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: text-pan 6s linear infinite;
-            background-size: 200% auto;
-        }
-
-        @keyframes text-pan {
-            from { background-position: 0% center; }
-            to { background-position: -200% center; }
         }
 
         .hero p {
-            font-size: 1.25rem;
-            color: var(--text-light);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto 2rem auto;
-        }
-        
-        .login-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-            background: var(--gradient);
-            border-radius: 999px;
-            text-decoration: none;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .login-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            margin: 0 auto 2.5rem auto;
+            line-height: 1.6;
         }
 
         .agent-showcase {
-            padding: 4rem 0;
+            padding: 2rem 0 6rem 0;
         }
         
         .agent-showcase h2 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 3rem;
+            color: var(--text-secondary);
         }
 
         .agent-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
 
         .agent-card {
-            background: var(--bg-light);
-            border: 1px solid var(--border);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 2rem;
             text-decoration: none;
             color: var(--text-bright);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
             display: flex;
             flex-direction: column;
             text-align: left;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .agent-card:hover {
             transform: translateY(-8px);
-            border-color: #6366f1;
+            border-color: rgba(168, 85, 247, 0.5);
+            background-color: rgba(28, 28, 28, 0.5);
         }
 
         .agent-name {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 0.75rem;
+            color: var(--text-primary);
         }
 
         .agent-description {
             font-size: 1rem;
-            color: var(--text-light);
+            color: var(--text-secondary);
             line-height: 1.6;
             flex-grow: 1;
         }
@@ -143,64 +176,69 @@
             margin-top: 1.5rem;
             align-self: flex-end;
             font-size: 1.5rem;
-            transition: transform 0.3s ease;
+            color: var(--text-secondary);
+            transition: transform 0.3s ease, color 0.3s ease;
         }
 
         .agent-card:hover .arrow {
             transform: translateX(5px);
+            color: var(--text-primary);
         }
         
         footer {
             text-align: center;
-            padding: 4rem 0 2rem 0;
-            color: var(--text-light);
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 3rem 0; }
+            .agent-showcase { padding: 2rem 0 4rem 0; }
         }
 
     </style>
 </head>
 <body>
+    <div class="background-glow"></div>
 
     <header class="container">
         <div class="logo">Dreamline</div>
         {% if session.user %}
-            <a href="{{ url_for('logout') }}" class="login-button">Logout</a>
+            <a href="{{ url_for('logout') }}" class="cta-button">Logout</a>
         {% else %}
-            <a href="{{ url_for('login') }}" class="login-button">Get Started</a>
+            <a href="{{ url_for('login') }}" class="cta-button">Get Started</a>
         {% endif %}
     </header>
 
-    <main>
+    <main class="container">
         <section class="hero">
-            <div class="container">
-                <h1>Meet Your Specialist AI Team</h1>
-                <p>One platform, seven specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
-                {% if not session.user %}
-                    <a href="{{ url_for('login') }}" class="login-button">Login to Select Agent</a>
-                {% endif %}
-            </div>
+            <h1>Meet Your Specialist AI Team</h1>
+            <p>One platform, seven specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
+            {% if not session.user %}
+                <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
+            {% endif %}
         </section>
 
         {% if session.user %}
         <section class="agent-showcase">
-            <div class="container">
-                <h2>Choose Your Agent</h2>
-                <div class="agent-grid">
-                    {% for agent_key, agent_info in agents.items() %}
-                    <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card">
-                        <div>
-                            <div class="agent-name">{{ agent_info.name }}</div>
-                            <p class="agent-description">{{ agent_info.description }}</p>
-                        </div>
-                        <div class="arrow">→</div>
-                    </a>
-                    {% endfor %}
-                </div>
+            <h2>Choose Your Agent</h2>
+            <div class="agent-grid">
+                {% for agent_key, agent_info in agents.items() %}
+                <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card">
+                    <div>
+                        <div class="agent-name">{{ agent_info.name }}</div>
+                        <p class="agent-description">{{ agent_info.description }}</p>
+                    </div>
+                    <div class="arrow">→</div>
+                </a>
+                {% endfor %}
             </div>
         </section>
         {% endif %}
     </main>
 
-    <footer>
+    <footer class="container">
         <p>&copy; 2024 Dreamline. All rights reserved.</p>
     </footer>
 
