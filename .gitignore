@@ -1,0 +1,14 @@
+# Environment variables
+.env
+
+# Flask session files
+flask_session/
+
+# Python cache
+__pycache__/
+
+# Google OAuth credentials file
+*.json
+
+# SQLite Database
+*.db 
