@@ -137,10 +137,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin: 0;
-            background: linear-gradient(90deg, #8990f6 0%, #d164e8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--on-surface-color);
         }
         
         .profile-avatar {
@@ -163,7 +160,6 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            padding-bottom: 90px;
             scrollbar-width: thin;
             scrollbar-color: var(--secondary-color) var(--background-color);
         }
@@ -202,6 +198,8 @@
 
         .greeting-block .normal-text {
             color: var(--secondary-color);
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 400;
         }
 
         .suggestions {
@@ -268,14 +266,9 @@
         }
         
         .input-bar-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem;
+            padding: 1rem 1rem 1.5rem 1rem;
             background-color: var(--background-color);
             width: 100%;
-            z-index: 1000;
         }
         
         .input-bar {
@@ -312,11 +305,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .input-icons button:hover {
+            background-color: #282a2b;
         }
         
         #send-btn {
             background-color: var(--primary-color);
             color: white;
+        }
+        
+        #send-btn:hover {
+            background-color: #7a7fe9;
         }
         
         .footer-note {
@@ -338,7 +340,18 @@
             .mobile-menu-btn { display: flex !important; }
             .topbar { padding: 12px 16px; }
             .main { padding-left: 0; }
-            .input-bar-container { left: 0; }
+            .input-bar-container { 
+                position: fixed;
+                bottom: 0;
+                left: 0; 
+                right: 0;
+                z-index: 1000;
+                border-top: 1px solid var(--border-color);
+                padding: 1rem;
+            }
+            .content-area {
+                padding-bottom: 120px;
+            }
         }
     </style>
 </head>
