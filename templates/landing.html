@@ -308,13 +308,36 @@
             background-color: rgba(168, 85, 247, 0.1);
         }
 
+        @keyframes gradient-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .agent-card.premium-card {
-            border-color: #22d3ee;
+            position: relative;
+            border-color: transparent;
+            z-index: 1;
+        }
+
+        .agent-card.premium-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; 
+            left: -2px;
+            z-index: -1;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            background: linear-gradient(60deg, #22d3ee, #a855f7, #ec4899, #22d3ee);
+            background-size: 300% 300%;
+            border-radius: 18px;
+            animation: gradient-glow 4s linear infinite;
         }
 
         .agent-card.premium-card:hover {
-            border-color: #67e8f9;
-            box-shadow: 0 0 30px rgba(34, 211, 238, 0.25);
+            transform: translateY(-8px);
+            border-color: transparent;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
         }
 
         .agent-card:hover {
