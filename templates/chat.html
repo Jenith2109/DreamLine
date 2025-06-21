@@ -111,6 +111,7 @@
             background: var(--background-color);
             height: 100vh;
             overflow: hidden;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .topbar {
@@ -137,7 +138,10 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin: 0;
-            color: var(--on-surface-color);
+            background: linear-gradient(90deg, #8990f6 0%, #d164e8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .profile-avatar {
@@ -186,6 +190,7 @@
             font-size: clamp(2.5rem, 6vw, 3.5rem);
             font-weight: 700;
             line-height: 1.2;
+            margin-bottom: 2rem;
         }
 
         .greeting-block .gradient-text {
@@ -207,7 +212,7 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
             width: 100%;
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
         
         .suggestion-card {
@@ -278,8 +283,12 @@
             align-items: center;
             background-color: var(--surface-color);
             border-radius: 28px;
-            padding: 8px;
+            padding: 4px 8px 4px 16px;
             border: 1px solid var(--border-color);
+        }
+
+        .input-bar:focus-within {
+            border-color: var(--secondary-color);
         }
         
         #chat-input {
@@ -292,6 +301,7 @@
             border: none;
             outline: none;
             max-height: 120px;
+            padding-left: 12px;
         }
         
         .input-icons button {
@@ -299,8 +309,8 @@
             border: none;
             color: #71717a;
             cursor: pointer;
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -359,6 +369,11 @@
     <div class="layout">
         <div class="sidebar" id="sidebar">
             <div class="sidebar-top">
+                <button class="icon" id="sidebar-hamburger" title="Collapse menu">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
                 <form method="POST" action="/new_chat">
                     <button class="new-chat" title="Start new chat" type="submit">+</button>
                 </form>
@@ -479,6 +494,23 @@
         if(contentArea) {
             contentArea.scrollTop = contentArea.scrollHeight;
         }
+
+        // Enter to send
+        document.getElementById('chat-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const form = document.getElementById('chat-form');
+                if (form) form.requestSubmit();
+            }
+        });
+
+        // Suggestion click
+        document.querySelectorAll('.suggestion-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.getElementById('chat-input').value = card.dataset.suggestion;
+                document.getElementById('chat-form').requestSubmit();
+            });
+        });
     });
     </script>
 </body>
