@@ -308,6 +308,18 @@
             background-color: rgba(168, 85, 247, 0.1);
         }
 
+        .agent-card.user-custom-card {
+            border-style: solid;
+            border-color: rgba(34, 211, 238, 0.5);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.05), rgba(168, 85, 247, 0.05));
+        }
+        
+        .agent-card.user-custom-card:hover {
+            border-color: rgba(34, 211, 238, 0.8);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(168, 85, 247, 0.1));
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.2);
+        }
+
         @keyframes gradient-glow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -537,6 +549,14 @@
                                     </div>
                                     <div class="arrow">→</div>
                                 </a>
+                            {% elif agent_key == 'user_custom' %}
+                                <a href="{{ url_for('set_agent', agent_name='custom') }}" class="agent-card scroll-animate user-custom-card">
+                                    <div>
+                                        <div class="agent-name">✨ {{ agent_info.name }}</div>
+                                        <p class="agent-description">{{ agent_info.description }}</p>
+                                    </div>
+                                    <div class="arrow">→</div>
+                                </a>
                             {% elif agent_key == 'adaptive_agent' %}
                                 <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card scroll-animate premium-card">
                                     <div>
@@ -574,7 +594,13 @@
                             <h3>Agents</h3>
                             <div class="footer-agent-grid">
                                 {% for agent_key, agent_info in agents.items() %}
-                                <a href="{{ url_for('set_agent', agent_name=agent_key) }}">{{ agent_info.name }}</a>
+                                    {% if agent_key == 'custom' %}
+                                        <a href="{{ url_for('custom_agent') }}">{{ agent_info.name }}</a>
+                                    {% elif agent_key == 'user_custom' %}
+                                        <a href="{{ url_for('set_agent', agent_name='custom') }}">{{ agent_info.name }}</a>
+                                    {% else %}
+                                        <a href="{{ url_for('set_agent', agent_name=agent_key) }}">{{ agent_info.name }}</a>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         </div>

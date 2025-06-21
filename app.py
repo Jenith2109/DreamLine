@@ -197,7 +197,33 @@ def set_agent(agent_name):
 
 @app.route("/")
 def index():
-    return render_template("landing.html", agents=DYNAMIC_AGENTS)
+    # Get user's custom agents if logged in
+    custom_agents = {}
+    if "user" in session:
+        user_id = get_or_create_user(session["user"].get("name", "User"))
+        conn = sqlite3.connect('dip_users.db')
+        c = conn.cursor()
+        c.execute("SELECT custom_agent_name, custom_prompt FROM users WHERE id = ?", (user_id,))
+        custom_agent_data = c.fetchone()
+        conn.close()
+        
+        if custom_agent_data and custom_agent_data[0] and custom_agent_data[1]:
+            custom_agents['user_custom'] = {
+                "name": custom_agent_data[0],
+                "description": "Your personalized AI agent with custom personality and expertise.",
+                "prompt": custom_agent_data[1],
+                "suggestions": [
+                    "What can you help me with?",
+                    "Tell me about your personality",
+                    "How were you created?"
+                ]
+            }
+    
+    # Combine predefined agents with user's custom agents
+    all_agents = DYNAMIC_AGENTS.copy()
+    all_agents.update(custom_agents)
+    
+    return render_template("landing.html", agents=all_agents)
 
 @app.route("/custom-agent", methods=["GET", "POST"])
 def custom_agent():
