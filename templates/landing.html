@@ -1,98 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome to Dreamline</title>
+    <title>Dreamline</title>
     <style>
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes subtle-glow {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
 
-        @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         body {
-            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+            font-family: 'Inter', 'Roboto', sans-serif;
             margin: 0;
+            background-color: #111;
+            color: #fff;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            color: white;
-            background: linear-gradient(-45deg, #6366f1, #ef4444, #3b82f6, #8b5cf6);
-            background-size: 400% 400%;
-            animation: gradient-animation 15s ease infinite;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            left: 50%;
+            top: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0) 60%);
+            animation: subtle-glow 20s linear infinite;
         }
 
         .container {
-            text-align: center;
+            max-width: 800px;
+            width: 100%;
             padding: 2rem;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fade-in-up 1s ease-out;
+            z-index: 1;
+            animation: fade-in 1.2s ease-out forwards;
         }
 
         .title {
-            font-size: 4.5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            margin-bottom: 1rem;
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(180deg, #fff 70%, #a8a29e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin: 0;
+            animation: fade-in 1.2s ease-out 0.2s forwards;
+            opacity: 0;
         }
 
         .subtitle {
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 3rem;
-            font-weight: 300;
+            font-size: 1.25rem;
+            color: #a1a1aa;
+            margin: 1.5rem 0 2.5rem 0;
+            max-width: 600px;
+            line-height: 1.6;
+            animation: fade-in 1.2s ease-out 0.4s forwards;
+            opacity: 0;
         }
 
         .login-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 14px 30px;
-            border: none;
-            border-radius: 28px;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #333;
-            font-size: 1.1rem;
+            padding: 12px 24px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-size: 1rem;
             font-weight: 500;
             text-decoration: none;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            animation: fade-in 1.2s ease-out 0.6s forwards;
+            opacity: 0;
         }
 
         .login-button:hover {
-            transform: translateY(-3px);
-            background-color: #fff;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background-color: #222;
+            border-color: #555;
+            transform: translateY(-2px);
         }
 
         .login-button img {
-            width: 22px;
-            height: 22px;
-            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Welcome to Dreamline</h1>
-        <p class="subtitle">Your intelligent companion awaits.</p>
+        <h1 class="title">Meet your second brain.</h1>
+        <p class="subtitle">Dreamline is the blazingly fast and remarkably smart AI assistant. Start getting more done, in less time.</p>
         <a href="/login" class="login-button">
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo">
             Sign in with Google
