@@ -326,6 +326,79 @@
             align-items: center;
             justify-content: center;
         }
+        .input-bar-container {
+            padding: 1rem 2rem 2rem 2rem;
+            background-color: #0d0d0d;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .input-bar {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: #18181b;
+            border-radius: 24px;
+            padding: 8px;
+            border: 1px solid #27272a;
+            transition: border-color 0.2s;
+        }
+        .input-bar:focus-within {
+             border-color: #52525b;
+        }
+        #chat-input {
+            width: 100%;
+            flex: 1;
+            min-height: 24px;
+            max-height: 200px;
+            padding: 8px;
+            background-color: transparent;
+            color: #e4e4e7;
+            font-size: 1rem;
+            resize: none;
+            border: none;
+            outline: none;
+        }
+        .input-icons {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 4px;
+        }
+        .input-icons button {
+            background: none;
+            border: none;
+            color: #71717a;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s, background-color 0.2s;
+        }
+        .input-icons button:hover {
+            color: #e4e4e7;
+            background-color: #27272a;
+        }
+        #send-btn {
+            background-color: #2563eb;
+            color: white;
+        }
+        #send-btn:hover {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .footer-note {
+            text-align: center;
+            color: #52525b;
+            font-size: 0.8rem;
+            padding-top: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -405,14 +478,14 @@
             {% endif %}
             <div class="input-bar-container">
                 <form id="chat-form" method="POST" class="input-bar" enctype="multipart/form-data">
-                    <textarea name="message" id="chat-input" placeholder="Enter a prompt here" rows="1"></textarea>
-                    <div class="input-icons left">
+                    <div class="input-icons">
                         <button type="button" id="attach-btn" title="Attach file">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99999 7.49996V12.5M7.49999 9.99996H12.5M17.5 9.99996C17.5 14.1421 14.1421 17.5 9.99999 17.5C5.85785 17.5 2.5 14.1421 2.5 9.99996C2.5 5.85781 5.85785 2.5 9.99999 2.5C14.1421 2.5 17.5 5.85781 17.5 9.99996Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                         <input type="file" name="file" id="file-input" style="display: none;" onchange="this.form.submit()">
                     </div>
-                    <div class="input-icons right">
+                    <textarea name="message" id="chat-input" placeholder="Enter a prompt here" rows="1"></textarea>
+                    <div class="input-icons">
                         <button type="button" id="mic-btn" title="Use microphone">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99996 12.5C11.3807 12.5 12.5 11.3807 12.5 9.99996V5.83329C12.5 4.45259 11.3807 3.33329 9.99996 3.33329C8.61926 3.33329 7.5 4.45259 7.5 5.83329V9.99996C7.5 11.3807 8.61926 12.5 9.99996 12.5ZM15.8333 8.33329V9.99996C15.8333 13.2216 13.2216 15.8333 9.99996 15.8333C6.77826 15.8333 4.16663 13.2216 4.16663 9.99996V8.33329M9.99996 15.8333V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
@@ -421,9 +494,9 @@
                         </button>
                     </div>
                 </form>
-            </div>
-            <div class="footer-note">
-                Dreamline may display inaccurate info, including about people, so double-check its responses. Your privacy and Dreamline Apps
+                <div class="footer-note">
+                    Dreamline may display inaccurate info, including about people, so double-check its responses. Your privacy and Dreamline Apps
+                </div>
             </div>
         </div>
     </div>
