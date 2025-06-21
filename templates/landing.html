@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #000000;
@@ -19,6 +19,10 @@
             --logo-gradient: linear-gradient(90deg, #a855f7, #ec4899);
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+        
         @keyframes move-glow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -76,8 +80,8 @@
         }
 
         header .container {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -86,9 +90,46 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--logo-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            position: relative;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: -6px;
+            left: 0;
+            background-color: var(--text-primary);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        nav a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
         }
         
         .cta-button {
@@ -134,7 +175,8 @@
         }
         
         .hero h1 {
-            font-size: clamp(2.8rem, 6vw, 4.2rem);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(3rem, 6vw, 4.5rem);
             font-weight: 800;
             line-height: 1.2;
             margin: 0 auto 1.5rem auto;
@@ -265,16 +307,89 @@
         
         footer {
             text-align: center;
-            padding: 2rem 0;
+            padding: 4rem 0 2rem 0;
             color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: left;
+            width: 100%;
+        }
+
+        .footer-column h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--text-primary);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .footer-bottom {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 0.9rem;
         }
 
         @media (max-width: 768px) {
+            nav { display: none; }
             .hero { padding: 4rem 0; }
             .agent-showcase { padding: 2rem 0 4rem 0; }
             .cursor-glow { display: none; }
             .image-showcase { transform: rotateX(0) rotateY(0); }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+             .footer-content {
+                grid-template-columns: 1fr;
+            }
         }
 
     </style>
@@ -286,6 +401,10 @@
         <header>
             <div class="container">
                 <div class="logo">Dreamline</div>
+                <nav>
+                    <a href="#showcase">Showcase</a>
+                    <a href="#agents">Agents</a>
+                </nav>
                 {% if session.user %}
                     <a href="{{ url_for('logout') }}" class="cta-button">Logout</a>
                 {% else %}
@@ -304,7 +423,7 @@
                             <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
                         {% endif %}
                     </div>
-                    <div class="image-showcase-wrapper scroll-animate">
+                    <div id="showcase" class="image-showcase-wrapper scroll-animate">
                         <div class="image-showcase">
                             <div class="browser-header">
                                 <div class="browser-dot red"></div>
@@ -319,7 +438,7 @@
                 </section>
 
                 {% if session.user %}
-                <section class="agent-showcase">
+                <section id="agents" class="agent-showcase">
                     <h2 class="scroll-animate">Choose Your Agent</h2>
                     <div class="agent-grid">
                         {% for agent_key, agent_info in agents.items() %}
@@ -337,14 +456,58 @@
             </div>
         </main>
 
-        <footer>
+        <footer class="scroll-animate">
             <div class="container">
-                <p>&copy; 2025 Dreamline. All rights reserved.</p>
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3 class="logo">Dreamline</h3>
+                        <p>Your AI-powered future starts here.</p>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Agents</h3>
+                        <ul>
+                            {% for agent_key, agent_info in agents.items() %}
+                            <li><a href="{{ url_for('set_agent', agent_name=agent_key) }}">{{ agent_info.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Connect</h3>
+                        <div class="social-icons">
+                            <a href="https://github.com/Jenith2109/DreamLine" target="_blank" title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                            </a>
+                            <a href="#" target="_blank" title="Twitter/X">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Legal</h3>
+                        <ul>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Dreamline. All rights reserved.</p>
+                </div>
             </div>
         </footer>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scrolling for nav links
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
             // Cursor Glow Effect
             const glow = document.querySelector('.cursor-glow');
             if (glow) {
@@ -362,14 +525,18 @@
                     }
                 });
             }, {
-                threshold: 0.2,
+                threshold: 0.1,
             });
 
             const elementsToAnimate = document.querySelectorAll('.scroll-animate');
             elementsToAnimate.forEach((element, index) => {
+                let delay = 0;
                 if (element.classList.contains('agent-card')) {
-                    element.style.transitionDelay = `${index * 100}ms`;
+                    delay = index * 100;
+                } else if (element.classList.contains('footer-column')) {
+                    delay = index * 150;
                 }
+                element.style.transitionDelay = `${delay}ms`;
                 observer.observe(element);
             });
             
