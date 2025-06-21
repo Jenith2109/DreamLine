@@ -57,6 +57,17 @@
             border-right: 1px solid #262626;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2000;
+            flex-shrink: 0;
+        }
+        
+        .sidebar.collapsed {
+            width: 0;
+            padding: 24px 0;
+            overflow: hidden;
+        }
+        
+        .sidebar.collapsed > * {
+            visibility: hidden;
         }
         
         .sidebar .new-chat {
@@ -114,6 +125,10 @@
             transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
+        .main.expanded {
+            margin-left: -90px;
+        }
+        
         .topbar {
             width: 100%;
             display: flex;
@@ -123,6 +138,22 @@
             box-sizing: border-box;
             flex-shrink: 0;
             z-index: 100;
+        }
+        
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: var(--on-surface-color);
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
         }
         
         .mobile-menu-btn {
@@ -138,7 +169,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin: 0;
-            background: linear-gradient(90deg, #8990f6 0%, #d164e8 100%);
+            background: linear-gradient(90deg, #d84879 0%, #a656e2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -190,7 +221,7 @@
             font-size: clamp(2.5rem, 6vw, 3.5rem);
             font-weight: 700;
             line-height: 1.2;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .greeting-block .gradient-text {
@@ -205,6 +236,7 @@
             color: var(--secondary-color);
             font-size: clamp(1.2rem, 3vw, 1.8rem);
             font-weight: 400;
+            margin-top: 2.5rem;
         }
 
         .suggestions {
@@ -285,6 +317,7 @@
             border-radius: 28px;
             padding: 4px 8px 4px 16px;
             border: 1px solid var(--border-color);
+            transition: border-color 0.2s ease;
         }
 
         .input-bar:focus-within {
@@ -301,7 +334,6 @@
             border: none;
             outline: none;
             max-height: 120px;
-            padding-left: 12px;
         }
         
         .input-icons button {
@@ -349,7 +381,9 @@
             .sidebar.open { left: 0; }
             .mobile-menu-btn { display: flex !important; }
             .topbar { padding: 12px 16px; }
-            .main { padding-left: 0; }
+            .main { padding-left: 0; margin-left: 0 !important; }
+            .main.expanded { margin-left: 0 !important; }
+            .hamburger-btn { display: none; } /* Hide desktop hamburger on mobile */
             .input-bar-container { 
                 position: fixed;
                 bottom: 0;
@@ -369,11 +403,6 @@
     <div class="layout">
         <div class="sidebar" id="sidebar">
             <div class="sidebar-top">
-                <button class="icon" id="sidebar-hamburger" title="Collapse menu">
-                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
                 <form method="POST" action="/new_chat">
                     <button class="new-chat" title="Start new chat" type="submit">+</button>
                 </form>
@@ -401,12 +430,19 @@
         
         <div class="main" id="main-content">
             <div class="topbar">
-                <button class="mobile-menu-btn" id="mobile-menu-btn-top">
-                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <h1 class="app-title">Dreamline</h1>
+                <div class="topbar-left">
+                    <button class="hamburger-btn" id="hamburger-btn">
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="mobile-menu-btn" id="mobile-menu-btn-top">
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <h1 class="app-title">Dreamline</h1>
+                </div>
                 <div class="profile-avatar" id="profile-avatar" title="{{ session['user']['name'] }}">
                     <img src="{{ session['user']['picture'] }}" alt="User Avatar">
                 </div>
@@ -469,17 +505,31 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Mobile menu functionality
-        const mobileMenuBtns = document.querySelectorAll('#mobile-menu-btn, #mobile-menu-btn-top');
+        // --- Sidebar Toggle ---
+        const hamburgerBtn = document.getElementById('hamburger-btn');
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
         
-        function toggleSidebar() {
-            sidebar.classList.toggle('open');
+        const isSidebarCollapsed = () => localStorage.getItem('sidebarCollapsed') === 'true';
+
+        if (isSidebarCollapsed()) {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('expanded');
         }
+
+        hamburgerBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+        });
+
+
+        // --- Mobile menu functionality ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn-top');
+        const mobileSidebar = document.getElementById('sidebar'); 
         
-        mobileMenuBtns.forEach(btn => {
-            btn.addEventListener('click', toggleSidebar);
+        mobileMenuBtn.addEventListener('click', () => {
+             mobileSidebar.classList.toggle('open');
         });
         
         // Auto-resize textarea
