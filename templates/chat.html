@@ -399,9 +399,46 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
+        .loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        @keyframes loader-bounce {
+            0%, 100% { transform: scale(0.5); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 1; }
+        }
+
+        .loader-circle {
+            width: 8px;
+            height: 8px;
+            background-color: #a1a1aa;
+            border-radius: 50%;
+            animation: loader-bounce 1.2s infinite ease-in-out;
+            animation-delay: var(--delay);
+        }
     </style>
 </head>
 <body>
+    <template id="loader-template">
+        <div class="chat-row ai" id="loading-bubble">
+            <div class="avatar bot">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="#3b82f6"/><path d="M7 14C7 14 8.5 16 12 16C15.5 16 17 14 17 14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 9.5C9.27614 9.5 9.5 9.27614 9.5 9C9.5 8.72386 9.27614 8.5 9 8.5C8.72386 8.5 8.5 8.72386 8.5 9C8.5 9.27614 8.72386 9.5 9 9.5Z" fill="white"/><path d="M15 9.5C15.2761 9.5 15.5 9.27614 15.5 9C15.5 8.72386 15.2761 8.5 15 8.5C14.7239 8.5 14.5 8.72386 14.5 9C14.5 9.27614 14.7239 9.5 15 9.5Z" fill="white"/></svg>
+            </div>
+            <div class="bubble ai loader">
+                <div class="loader-circle" style="--delay: -0.4s;"></div>
+                <div class="loader-circle" style="--delay: -0.3s;"></div>
+                <div class="loader-circle" style="--delay: -0.2s;"></div>
+                <div class="loader-circle" style="--delay: -0.1s;"></div>
+                <div class="loader-circle" style="--delay: 0s;"></div>
+                <div class="loader-circle" style="--delay: 0.1s;"></div>
+                <div class="loader-circle" style="--delay: 0.2s;"></div>
+            </div>
+        </div>
+    </template>
     <div class="layout">
         <div class="sidebar" id="sidebar" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100vh;">
             <div class="sidebar-top" style="display: flex; flex-direction: column; align-items: center; gap: 28px; width: 100%;">
@@ -531,11 +568,66 @@
         var chatForm = document.getElementById('chat-form');
         if (chatForm) {
             chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const chatHistoryContainer = document.getElementById('chat-history');
+                const chatInput = document.getElementById('chat-input');
+                const formData = new FormData(chatForm);
+                const userMessage = formData.get('message').trim();
+                
+                if (!userMessage && !formData.get('file').name) return;
+
+                // Create and append user message
+                const userBubbleHTML = `
+                    <div class="chat-row user">
+                        <div class="bubble user">${userMessage}</div>
+                        <div class="avatar user">
+                            <img src="{{ session['user']['picture'] }}" alt="User Avatar">
+                        </div>
+                    </div>`;
+                if(userMessage) chatHistoryContainer.insertAdjacentHTML('beforeend', userBubbleHTML);
+                
+                chatInput.value = '';
+                textarea.style.height = 'auto';
+                chatHistoryContainer.parentElement.scrollTop = chatHistoryContainer.parentElement.scrollHeight;
+
                 var landing = document.getElementById('landing-content');
-                if (landing && !landing.classList.contains('fade-out')) {
-                    landing.classList.add('fade-out');
-                    setTimeout(function() { landing.style.display = 'none'; }, 400);
+                if (landing) {
+                    landing.style.display = 'none';
                 }
+
+                // Create and append loader
+                const loaderTemplate = document.getElementById('loader-template');
+                const loaderNode = loaderTemplate.content.cloneNode(true);
+                chatHistoryContainer.appendChild(loaderNode);
+                chatHistoryContainer.parentElement.scrollTop = chatHistoryContainer.parentElement.scrollHeight;
+
+                // Fetch response from server
+                fetch('/', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loading-bubble').remove();
+                    
+                    const aiBubbleHTML = `
+                        <div class="chat-row ai">
+                             <div class="avatar bot">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="#3b82f6"/><path d="M7 14C7 14 8.5 16 12 16C15.5 16 17 14 17 14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 9.5C9.27614 9.5 9.5 9.27614 9.5 9C9.5 8.72386 9.27614 8.5 9 8.5C8.72386 8.5 8.5 8.72386 8.5 9C8.5 9.27614 8.72386 9.5 9 9.5Z" fill="white"/><path d="M15 9.5C15.2761 9.5 15.5 9.27614 15.5 9C15.5 8.72386 15.2761 8.5 15 8.5C14.7239 8.5 14.5 8.72386 14.5 9C14.5 9.27614 14.7239 9.5 15 9.5Z" fill="white"/></svg>
+                            </div>
+                            <div class="bubble ai">${data.response}</div>
+                        </div>`;
+                    chatHistoryContainer.insertAdjacentHTML('beforeend', aiBubbleHTML);
+                    chatHistoryContainer.parentElement.scrollTop = chatHistoryContainer.parentElement.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error fetching AI response:', error);
+                    const loadingBubble = document.getElementById('loading-bubble');
+                    if (loadingBubble) {
+                        loadingBubble.querySelector('.bubble.ai').textContent = 'An error occurred. Please try again.';
+                    }
+                });
             });
         }
 

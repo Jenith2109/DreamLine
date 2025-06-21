@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 from authlib.integrations.flask_client import OAuth
 from db import init_db, get_or_create_user
 from memory import save_message, get_memory
@@ -62,12 +62,12 @@ def chat():
     user_info = session["user"]
     username = user_info.get('name', 'User')
     user_id = get_or_create_user(username)
-    memory = get_memory(user_id)
 
     if request.method == "POST":
         user_input = request.form.get("message", "")
         file = request.files.get("file")
         file_content = None
+
         if file and file.filename:
             filename = secure_filename(file.filename)
             ext = os.path.splitext(filename)[1].lower()
@@ -79,27 +79,32 @@ def chat():
             elif ext == ".docx":
                 doc = docx.Document(io.BytesIO(file.read()))
                 file_content = " ".join([p.text for p in doc.paragraphs])
-            else:
-                file_content = None
+            
             if file_content:
                 instruction = (
-                    f"Please summarize and analyze the following file for key points, important dates, and any actions required.\n"
-                    f"File name: {filename}\n---\n"
+                    f"Please summarize and analyze the following file for key points, important dates, and any actions required.\\n"
+                    f"File name: {filename}\\n---\\n"
                 )
                 if user_input.strip():
                     user_input = (
-                        f"{instruction}User's question: {user_input.strip()}\n(Attached file content below)\n{file_content[:1500]}"
+                        f"{instruction}User's question: {user_input.strip()}\\n(Attached file content below)\\n{file_content[:1500]}"
                     )
                 else:
                     user_input = (
-                        f"{instruction}(Attached file content below)\n{file_content[:1500]}"
+                        f"{instruction}(Attached file content below)\\n{file_content[:1500]}"
                     )
+
         if user_input:
             save_message(user_id, f"User: {user_input}")
+            memory = get_memory(user_id)
             response = generate_response(user_input, memory)
             save_message(user_id, f"AI: {response}")
-            memory = get_memory(user_id)
+            return jsonify({'response': response})
+        
+        return jsonify({'response': 'No input provided.'}), 400
 
+    # For GET requests, render the full page with chat history
+    memory = get_memory(user_id)
     return render_template("chat.html", username=username, memory=memory)
 
 @app.route("/new_chat", methods=["POST"])
