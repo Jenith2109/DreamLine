@@ -307,7 +307,7 @@
         
         footer {
             text-align: center;
-            padding: 4rem 0 2rem 0;
+            padding: 3rem 0;
             color: var(--text-secondary);
             font-size: 0.9rem;
             border-top: 1px solid var(--border-color);
@@ -338,6 +338,17 @@
         .footer-column ul li {
             margin-bottom: 0.75rem;
         }
+        
+        .footer-agent-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem 2rem;
+        }
+        
+        .footer-horizontal-links {
+            display: flex;
+            gap: 1.5rem;
+        }
 
         .footer-column a {
             color: var(--text-secondary);
@@ -366,7 +377,7 @@
         }
 
         .footer-bottom {
-            margin-top: 4rem;
+            margin-top: 3rem;
             padding-top: 2rem;
             border-top: 1px solid var(--border-color);
             display: flex;
@@ -465,11 +476,11 @@
                     </div>
                     <div class="footer-column">
                         <h3>Agents</h3>
-                        <ul>
+                        <div class="footer-agent-grid">
                             {% for agent_key, agent_info in agents.items() %}
-                            <li><a href="{{ url_for('set_agent', agent_name=agent_key) }}">{{ agent_info.name }}</a></li>
+                            <a href="{{ url_for('set_agent', agent_name=agent_key) }}">{{ agent_info.name }}</a>
                             {% endfor %}
-                        </ul>
+                        </div>
                     </div>
                     <div class="footer-column">
                         <h3>Connect</h3>
@@ -484,10 +495,10 @@
                     </div>
                     <div class="footer-column">
                         <h3>Legal</h3>
-                        <ul>
-                            <li><a href="#">Terms of Service</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                        </ul>
+                        <div class="footer-horizontal-links">
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Privacy Policy</a>
+                        </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
