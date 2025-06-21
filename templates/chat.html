@@ -557,10 +557,22 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Auto-resize textarea
         const textarea = document.getElementById('chat-input');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
+        
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        const debouncedResize = debounce(function() {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }, 100);
+
+        textarea.addEventListener('input', debouncedResize);
 
         // Attach button logic
         var attachBtn = document.getElementById('attach-btn');
