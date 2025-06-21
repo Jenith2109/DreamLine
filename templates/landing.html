@@ -130,8 +130,43 @@
         .hero {
             text-align: center;
             padding: 6rem 0;
+            position: relative;
         }
 
+        .hero-image {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            opacity: 0;
+            animation: hero-image-fade-in 1s ease-out forwards;
+        }
+
+        .hero-image.left {
+            left: -250px;
+            transform: translateY(-50%) rotate(-5deg);
+            animation-delay: 0.5s;
+        }
+
+        .hero-image.right {
+            right: -250px;
+            transform: translateY(-50%) rotate(5deg);
+            animation-delay: 0.8s;
+        }
+
+        @keyframes hero-image-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(-40%) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(-50%) scale(1);
+            }
+        }
+        
         .hero h1 {
             font-size: clamp(2.8rem, 6vw, 4.2rem);
             font-weight: 800;
@@ -256,11 +291,13 @@
         <main>
             <div class="container">
                 <section class="hero">
+                    <img src="{{ url_for('static', filename='chatbot_screenshot.png') }}" class="hero-image left" alt="Chatbot Screenshot">
                     <h1>Meet Your Specialist AI Team</h1>
                     <p>One platform, seven specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
                     {% if not session.user %}
                         <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
                     {% endif %}
+                    <img src="{{ url_for('static', filename='chatbot_screenshot.png') }}" class="hero-image right" alt="Chatbot Screenshot">
                 </section>
 
                 {% if session.user %}
