@@ -39,7 +39,7 @@ init_db()
 @app.route('/login')
 def login():
     redirect_uri = url_for('authorize', _external=True)
-    return google.authorize_redirect(redirect_uri)
+    return google.authorize_redirect(redirect_uri, prompt='select_account')
 
 @app.route('/authorize')
 def authorize():
