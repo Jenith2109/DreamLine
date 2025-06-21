@@ -1,43 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dreamline</title>
+    <title>Dreamline - The Future of AI Assistance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        @keyframes subtle-glow {
-            0% {
-                transform: translate(-50%, -50%) rotate(0deg);
+        @keyframes avatar-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
             }
-            100% {
-                transform: translate(-50%, -50%) rotate(360deg);
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
-        }
-
-        @keyframes fade-in {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         body {
-            font-family: 'Inter', 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            background-color: #111;
-            color: #fff;
-            overflow: hidden;
+            background-color: #0d0d0d;
+            color: #e4e4e7;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-align: center;
             height: 100vh;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            left: 50%;
-            top: 50%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0) 60%);
-            animation: subtle-glow 20s linear infinite;
+            overflow: hidden;
         }
 
         .container {
@@ -45,32 +35,25 @@
             width: 100%;
             padding: 2rem;
             z-index: 1;
-            animation: fade-in 1.2s ease-out forwards;
         }
 
         .title {
-            font-size: 5rem;
-            font-weight: 700;
+            font-size: 4rem;
+            font-weight: 800;
             line-height: 1.1;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.025em;
             background: linear-gradient(180deg, #fff 70%, #a8a29e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
             margin: 0;
-            animation: fade-in 1.2s ease-out 0.2s forwards;
-            opacity: 0;
         }
 
         .subtitle {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: #a1a1aa;
-            margin: 1.5rem 0 2.5rem 0;
-            max-width: 600px;
+            margin: 1.5rem auto 2.5rem auto;
+            max-width: 500px;
             line-height: 1.6;
-            animation: fade-in 1.2s ease-out 0.4s forwards;
-            opacity: 0;
         }
 
         .login-button {
@@ -78,24 +61,21 @@
             align-items: center;
             justify-content: center;
             padding: 12px 24px;
-            border: 1px solid #333;
+            border: none;
             border-radius: 8px;
-            background-color: #1a1a1a;
+            background-image: linear-gradient(to right, #5e62e3, #4a4ed4);
             color: #fff;
             font-size: 1rem;
             font-weight: 500;
             text-decoration: none;
             cursor: pointer;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
-            animation: fade-in 1.2s ease-out 0.6s forwards;
-            opacity: 0;
+            box-shadow: 0 4px 15px rgba(94, 98, 227, 0.2);
+            transition: all 0.3s ease;
         }
 
         .login-button:hover {
-            background-color: #222;
-            border-color: #555;
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(94, 98, 227, 0.3);
         }
 
         .login-button img {
@@ -103,19 +83,51 @@
             height: 20px;
             margin-right: 10px;
         }
+
+        .avatar-strip {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 4rem;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #333;
+            border: 2px solid #222;
+            opacity: 0;
+            animation: avatar-fade-in 0.5s ease-out forwards;
+            animation-delay: var(--delay);
+        }
+        
+        .social-proof {
+            margin-top: 1.5rem;
+            color: #71717a;
+            font-size: 0.9rem;
+        }
+
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Meet your second brain.</h1>
-        <p class="subtitle">Dreamline is the blazingly fast and remarkably smart AI assistant. Start getting more done, in less time.</p>
+        <h1 class="title">Meet your new AI companion.</h1>
+        <p class="subtitle">Dreamline streamlines your tasks, answers your questions, and helps you build amazing things. </p>
         <a href="/login" class="login-button">
-            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo">
-            Sign in with Google
+            Get Started
         </a>
+        <div class="avatar-strip">
+            <div class="avatar" style="--delay: 0.8s; background-color: #ef4444;"></div>
+            <div class="avatar" style="--delay: 0.9s; background-color: #3b82f6;"></div>
+            <div class="avatar" style="--delay: 1.0s; background-color: #22c55e;"></div>
+            <div class="avatar" style="--delay: 1.1s; background-color: #eab308;"></div>
+            <div class="avatar" style="--delay: 1.2s; background-color: #8b5cf6;"></div>
+            <div class="avatar" style="--delay: 1.3s; background-color: #f97316;"></div>
+            <div class="avatar" style="--delay: 1.4s; background-color: #14b8a6;"></div>
+        </div>
+        <p class="social-proof">Powering the world's most innovative minds.</p>
     </div>
 </body>
 </html> 
