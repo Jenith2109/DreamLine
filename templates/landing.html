@@ -12,12 +12,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         :root {
             --background-color: #0d0d0d;
-            --surface-color: #1e1f20;
+            --surface-color: #1a1a1a;
             --on-surface-color: #e8eaed;
-            --primary-color: #8990f6;
-            --secondary-color: #5f6368;
+            --primary-gradient: linear-gradient(135deg, #8b5cf6, #ec4899);
+            --border-color: #2a2a2a;
         }
 
         * {
@@ -57,36 +59,35 @@
         }
 
         body {
-            font-family: 'Inter', 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            background-color: #0d0d0d;
-            color: #e4e4e7;
+            background-color: var(--background-color);
+            color: var(--on-surface-color);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             height: 100vh;
             overflow-y: auto;
+            padding: 2rem;
         }
 
         .container {
             max-width: 900px;
             width: 100%;
-            padding: 4rem 2rem;
-            z-index: 1;
         }
 
         .title {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 5vw, 2.5rem);
             font-weight: 700;
-            background: -webkit-linear-gradient(45deg, #8b5cf6, #ec4899);
+            margin: 0 0 1rem 0;
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0 0 1rem 0;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             color: #a1a1aa;
             margin: 0 auto 3rem auto;
             max-width: 600px;
@@ -97,7 +98,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
-            justify-items: center;
         }
 
         .agent-card {
@@ -106,17 +106,17 @@
             text-align: left;
             padding: 1.5rem;
             border-radius: 16px;
-            background: #18181b;
-            border: 1px solid #27272a;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
             text-decoration: none;
-            color: #e4e4e7;
-            transition: all 0.3s ease;
+            color: var(--on-surface-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
         .agent-card:hover {
             transform: translateY(-5px);
-            border-color: #52525b;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: #8b5cf6;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
         
         .agent-name {
@@ -130,59 +130,6 @@
             color: #a1a1aa;
             line-height: 1.5;
             flex-grow: 1;
-        }
-
-        .login-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 12px;
-            background-color: var(--primary-color);
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .login-button:hover {
-            opacity: 0.9;
-        }
-
-        .login-button img {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-
-        .avatar-strip {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: clamp(2rem, 6vw, 4rem);
-            gap: clamp(8px, 2vw, 12px);
-            animation: fadeInUp 0.8s ease-out 0.6s both;
-        }
-
-        .avatar {
-            width: clamp(32px, 8vw, 40px);
-            height: clamp(32px, 8vw, 40px);
-            border-radius: 50%;
-            background-color: #333;
-            border: 2px solid #222;
-            opacity: 0;
-            animation: avatar-fade-in 0.5s ease-out forwards;
-            animation-delay: var(--delay);
-        }
-        
-        .social-proof {
-            margin-top: 1.5rem;
-            color: #71717a;
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
-            animation: fadeInUp 0.8s ease-out 0.8s both;
         }
         
         /* Mobile Optimizations */
@@ -359,8 +306,8 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Choose Your Specialist</h1>
-        <p class="subtitle">Select from one of our finely-tuned AI agents, each designed for a specific task, or start with our versatile general-purpose assistant.</p>
+        <h1 class="title">Welcome to Dreamline</h1>
+        <p class="subtitle">Choose your specialist AI to begin</p>
         
         <div class="agent-grid">
             {% for agent_key, agent_info in agents.items() %}
@@ -370,60 +317,6 @@
             </a>
             {% endfor %}
         </div>
-
     </div>
-    
-    <script>
-        // Prevent zoom on double tap for mobile
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-        
-        // Add loading animation delay
-        document.addEventListener('DOMContentLoaded', function() {
-            const loadingElements = document.querySelectorAll('.loading');
-            loadingElements.forEach((element, index) => {
-                element.style.animationDelay = `${index * 0.1}s`;
-            });
-        });
-        
-        // Handle viewport changes
-        function handleViewportChange() {
-            const isLandscape = window.innerWidth > window.innerHeight;
-            const isMobile = window.innerWidth <= 768;
-            
-            if (isMobile && isLandscape) {
-                document.body.style.height = 'auto';
-                document.body.style.minHeight = '100vh';
-            } else {
-                document.body.style.height = '100vh';
-                document.body.style.minHeight = 'auto';
-            }
-        }
-        
-        window.addEventListener('resize', handleViewportChange);
-        window.addEventListener('orientationchange', handleViewportChange);
-        
-        // Initialize viewport handling
-        handleViewportChange();
-        
-        // Service Worker Registration for PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/static/sw.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(function(err) {
-                        console.log('ServiceWorker registration failed');
-                    });
-            });
-        }
-    </script>
 </body>
 </html> 

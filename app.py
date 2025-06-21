@@ -107,14 +107,23 @@ def set_agent(agent_name):
     if "user" not in session:
         return redirect(url_for("login"))
     
+    # Set the agent
     if agent_name in AGENTS:
         session['agent'] = agent_name
     else:
-        # Default to generalist if agent name is invalid
         session['agent'] = 'generalist'
         
-    # Start a new chat when an agent is selected
-    return new_chat(redirect_to_chat=False)
+    # Clear the history for a new conversation with the selected agent
+    user_info = session.get("user")
+    username = user_info.get("name", "User")
+    user_id = get_or_create_user(username)
+    conn = sqlite3.connect('dip_users.db')
+    c = conn.cursor()
+    c.execute('DELETE FROM memories WHERE user_id = ?', (user_id,))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('chat'))
 
 @app.route("/", methods=["GET", "POST"])
 def chat():
@@ -173,7 +182,7 @@ def chat():
     return render_template("chat.html", username=username, memory=memory, agent=current_agent, agents=AGENTS)
 
 @app.route("/new_chat", methods=["POST", "GET"])
-def new_chat(redirect_to_chat=True):
+def new_chat():
     if "user" not in session:
         return redirect(url_for("login"))
     
@@ -181,21 +190,18 @@ def new_chat(redirect_to_chat=True):
     if not user_info:
         return redirect(url_for("login"))
 
-    # By default, new chats reset to the generalist agent
+    # New chats from the UI button reset to the generalist agent
     session['agent'] = 'generalist'
 
     username = user_info.get("name", "User")
     user_id = get_or_create_user(username)
-    # Clear all messages for this user
     conn = sqlite3.connect('dip_users.db')
     c = conn.cursor()
     c.execute('DELETE FROM memories WHERE user_id = ?', (user_id,))
     conn.commit()
     conn.close()
     
-    if redirect_to_chat:
-        return redirect(url_for("chat"))
-    return redirect(url_for('chat'))
+    return redirect(url_for("chat"))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
