@@ -2,10 +2,21 @@
 <html>
 <head>
     <title>Dreamline - The Future of AI Assistance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0d0d0d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/static/icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
         @keyframes avatar-fade-in {
             from {
                 opacity: 0;
@@ -16,9 +27,29 @@
                 transform: translateY(0);
             }
         }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             background-color: #0d0d0d;
             color: #e4e4e7;
@@ -28,6 +59,8 @@
             text-align: center;
             height: 100vh;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -38,44 +71,52 @@
         }
 
         .title {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 8vw, 4rem);
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -0.025em;
             background: linear-gradient(180deg, #fff 70%, #a8a29e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin: 0;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             color: #a1a1aa;
             margin: 1.5rem auto 2.5rem auto;
             max-width: 500px;
             line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
         }
 
         .login-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 24px;
+            padding: clamp(12px, 3vw, 16px) clamp(24px, 6vw, 32px);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             background-image: linear-gradient(to right, #5e62e3, #4a4ed4);
             color: #fff;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            font-weight: 600;
             text-decoration: none;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(94, 98, 227, 0.2);
             transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 48px;
         }
 
-        .login-button:hover {
+        .login-button:hover,
+        .login-button:active {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(94, 98, 227, 0.3);
+            background-image: linear-gradient(to right, #4a4ed4, #3b3bc7);
         }
 
         .login-button img {
@@ -88,13 +129,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 4rem;
-            gap: 12px;
+            margin-top: clamp(2rem, 6vw, 4rem);
+            gap: clamp(8px, 2vw, 12px);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
         }
 
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: clamp(32px, 8vw, 40px);
+            height: clamp(32px, 8vw, 40px);
             border-radius: 50%;
             background-color: #333;
             border: 2px solid #222;
@@ -106,19 +148,190 @@
         .social-proof {
             margin-top: 1.5rem;
             color: #71717a;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            animation: fadeInUp 0.8s ease-out 0.8s both;
         }
-
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .title {
+                margin-bottom: 0.5rem;
+            }
+            
+            .subtitle {
+                margin: 1rem auto 2rem auto;
+                max-width: 100%;
+            }
+            
+            .login-button {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .avatar-strip {
+                margin-top: 2rem;
+            }
+        }
+        
+        /* Tablet Optimizations */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            .title {
+                font-size: 3.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Large Screen Optimizations */
+        @media (min-width: 1025px) {
+            .container {
+                padding: 3rem;
+            }
+            
+            .title {
+                font-size: 4rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* Touch Device Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .login-button:hover {
+                transform: none;
+            }
+            
+            .login-button:active {
+                transform: scale(0.98);
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #0d0d0d;
+                color: #e4e4e7;
+            }
+        }
+        
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .login-button {
+                background-image: linear-gradient(to right, #1d4ed8, #1e40af);
+                border: 2px solid #3b82f6;
+            }
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Landscape orientation on mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                padding: 1rem 0;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                margin: 0.5rem auto 1.5rem auto;
+            }
+            
+            .avatar-strip {
+                margin-top: 1rem;
+            }
+        }
+        
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                margin: 1rem auto 1.5rem auto;
+            }
+            
+            .login-button {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .avatar {
+                width: 28px;
+                height: 28px;
+            }
+        }
+        
+        /* Loading animation for better perceived performance */
+        .loading {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        /* Focus styles for accessibility */
+        .login-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .login-button {
+                background: #000;
+                color: white;
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Meet your new AI companion.</h1>
-        <p class="subtitle">Dreamline streamlines your tasks, answers your questions, and helps you build amazing things. </p>
-        <a href="/login" class="login-button">
+        <h1 class="title loading">Meet your new AI companion.</h1>
+        <p class="subtitle loading">Dreamline streamlines your tasks, answers your questions, and helps you build amazing things.</p>
+        <a href="/login" class="login-button loading">
             Get Started
         </a>
-        <div class="avatar-strip">
+        <div class="avatar-strip loading">
             <div class="avatar" style="--delay: 0.8s; background-color: #ef4444;"></div>
             <div class="avatar" style="--delay: 0.9s; background-color: #3b82f6;"></div>
             <div class="avatar" style="--delay: 1.0s; background-color: #22c55e;"></div>
@@ -127,7 +340,60 @@
             <div class="avatar" style="--delay: 1.3s; background-color: #f97316;"></div>
             <div class="avatar" style="--delay: 1.4s; background-color: #14b8a6;"></div>
         </div>
-        <p class="social-proof">Powering the world's most innovative minds.</p>
+        <p class="social-proof loading">Powering the world's most innovative minds.</p>
     </div>
+    
+    <script>
+        // Prevent zoom on double tap for mobile
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Add loading animation delay
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingElements = document.querySelectorAll('.loading');
+            loadingElements.forEach((element, index) => {
+                element.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+        
+        // Handle viewport changes
+        function handleViewportChange() {
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile && isLandscape) {
+                document.body.style.height = 'auto';
+                document.body.style.minHeight = '100vh';
+            } else {
+                document.body.style.height = '100vh';
+                document.body.style.minHeight = 'auto';
+            }
+        }
+        
+        window.addEventListener('resize', handleViewportChange);
+        window.addEventListener('orientationchange', handleViewportChange);
+        
+        // Initialize viewport handling
+        handleViewportChange();
+        
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed');
+                    });
+            });
+        }
+    </script>
 </body>
 </html> 

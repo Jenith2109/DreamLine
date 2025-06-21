@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify, send_from_directory
 from authlib.integrations.flask_client import OAuth
 from db import init_db, get_or_create_user
 from memory import save_message, get_memory
@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.secret_key = os.environ.get('SECRET_KEY', 'supersecretkey')
 app.config.from_mapping(
     SESSION_TYPE='filesystem',
@@ -35,6 +35,14 @@ google = oauth.register(
 )
 
 init_db()
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory(app.static_folder, filename)
+
+@app.route('/manifest.json')
+def manifest():
+    return send_from_directory('static', 'manifest.json')
 
 @app.route('/login')
 def login():
@@ -121,4 +129,7 @@ def new_chat():
     conn.commit()
     conn.close()
     return redirect(url_for("chat"))
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
