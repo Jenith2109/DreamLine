@@ -2,49 +2,22 @@
 <html>
 <head>
     <title>DreamLine</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0d0d0d">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/static/icon-192.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        :root {
-            --background-color: #0d0d0d;
-            --surface-color: #1e1f20;
-            --on-surface-color: #e8eaed;
-            --primary-color: #8990f6;
-            --secondary-color: #5f6368;
-            --border-color: #3c4043;
-        }
-
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Google Sans', sans-serif;
-            background: var(--background-color);
-            color: var(--on-surface-color);
+            font-family: 'Inter', 'Roboto', sans-serif;
+            background: #0d0d0d;
+            color: #e4e4e7;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
-        
         .layout {
             display: flex;
             height: 100vh;
             width: 100vw;
         }
-        
         .sidebar {
             width: 90px;
             background: #111111;
@@ -52,53 +25,43 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 0;
+            padding: 24px 0 24px 0;
             box-sizing: border-box;
             border-right: 1px solid #262626;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 2000;
-            flex-shrink: 0;
         }
-        
-        .sidebar.collapsed {
-            width: 0;
-            padding: 24px 0;
-            overflow: hidden;
+        .sidebar .logo {
+            font-weight: 500;
+            font-size: 1.3rem;
+            margin-bottom: 36px;
+            letter-spacing: 0.5px;
+            color: #222;
         }
-        
-        .sidebar.collapsed > * {
-            visibility: hidden;
-        }
-        
         .sidebar .new-chat {
             width: 44px;
             height: 44px;
-            background: var(--surface-color);
+            background: #27272a;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.1rem;
             color: #a1a1aa;
+            margin-bottom: 28px;
             cursor: pointer;
             border: none;
-            transition: all 0.2s ease;
+            transition: background-color 0.2s;
         }
-        
         .sidebar .new-chat:hover {
             background: #3f3f46;
         }
-
         .sidebar .spacer {
             flex: 1;
         }
-        
         .sidebar .bottom-icons {
             display: flex;
             flex-direction: column;
             gap: 28px;
         }
-        
         .sidebar .bottom-icons .icon {
             width: 32px;
             height: 32px;
@@ -108,392 +71,479 @@
             color: #71717a;
             font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: color 0.2s;
         }
-        
         .sidebar .bottom-icons .icon:hover {
-            color: var(--on-surface-color);
+            color: #e4e4e7;
         }
-        
         .main {
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: var(--background-color);
-            height: 100vh;
+            position: relative;
+            background: #0d0d0d;
             overflow: hidden;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .main.expanded {
-            margin-left: -90px;
-        }
-        
         .topbar {
             width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            padding: 16px 24px;
+            padding: 36px 48px 0 48px;
             box-sizing: border-box;
-            flex-shrink: 0;
-            z-index: 100;
+            position: relative;
         }
-        
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .hamburger-btn {
-            background: none;
-            border: none;
-            color: var(--on-surface-color);
-            cursor: pointer;
-            padding: 0;
-            display: flex;
-            align-items: center;
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--on-surface-color);
-            cursor: pointer;
-            padding: 0;
-        }
-        
-        .app-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(90deg, #d84879 0%, #a656e2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
         .profile-avatar {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
             cursor: pointer;
-            border: 2px solid var(--border-color);
+            border: 2px solid #3f3f46;
         }
-        
         .profile-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
         }
-        
-        .content-area {
-            flex: 1;
-            overflow-y: auto;
+        .profile-dropdown {
+            position: absolute;
+            top: 90px;
+            right: 48px;
+            background: #18181b;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            border: 1px solid #27272a;
+            padding: 8px;
+            z-index: 100;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            padding: 10px 16px;
+            color: #e4e4e7;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .profile-dropdown a:hover {
+            background-color: #27272a;
+        }
+        .center-content {
             display: flex;
             flex-direction: column;
-            scrollbar-width: thin;
-            scrollbar-color: var(--secondary-color) var(--background-color);
-        }
-
-        .content-area::-webkit-scrollbar { width: 8px; }
-        .content-area::-webkit-scrollbar-track { background: var(--background-color); }
-        .content-area::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 4px; }
-        
-        #landing-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex: 1;
-            padding: 2rem;
-        }
-
-        .landing-inner {
-            max-width: 800px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            height: 100%;
             width: 100%;
-            margin: 0 auto;
+            padding-left: 120px;
+            padding-top: 60px;
+            box-sizing: border-box;
         }
-        
-        .greeting-block {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 2.5rem;
-        }
-
-        .greeting-block .gradient-text {
-            background: linear-gradient(to right, #8990f6, #d164e8);
+        .greeting {
+            font-size: 3.2rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #6366f1 0%, #ef4444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            padding-bottom: 0.5rem;
+            text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
         }
-
-        .greeting-block .normal-text {
-            color: var(--secondary-color);
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            font-weight: 400;
-            margin-top: 2.5rem;
+        .subheading {
+            font-size: 2.6rem;
+            color: #a1a1aa;
+            font-weight: 500;
+            margin-bottom: 2.8rem;
+            letter-spacing: 0.2px;
         }
-
         .suggestions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            width: 100%;
-            margin-top: 2rem;
+            display: flex;
+            gap: 1.2rem;
+            max-width: 900px;
         }
-        
         .suggestion-card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
+            background: #18181b;
+            border: 1px solid #27272a;
             border-radius: 12px;
-            padding: 1rem;
+            padding: 1.2rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--on-surface-color);
+            transition: all 0.2s;
+            flex: 1;
+            color: #a1a1aa;
         }
-        
         .suggestion-card:hover {
-            border-color: var(--secondary-color);
-            background: #282a2b;
+            border-color: #52525b;
+            background: #27272a;
         }
-
-        .chat-history {
+        .chat-history-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 2rem 0;
             display: flex;
             flex-direction: column;
+        }
+        .chat-history {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
             gap: 1rem;
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 0 1rem;
+            box-sizing: border-box;
         }
-        
         .chat-row {
             display: flex;
             align-items: flex-end;
             gap: 12px;
         }
-        
-        .chat-row.user { justify-content: flex-end; }
-        .chat-row.ai { justify-content: flex-start; }
-        
+        .chat-row.user {
+            justify-content: flex-end;
+        }
+        .chat-row.ai {
+            justify-content: flex-start;
+        }
         .bubble {
             padding: 12px 18px;
             border-radius: 22px;
-            max-width: 85%;
+            max-width: 75%;
             font-size: 0.95rem;
             line-height: 1.5;
-            word-wrap: break-word;
         }
-        
         .bubble.user {
             background-color: #3b82f6;
             color: white;
             border-bottom-right-radius: 6px;
         }
-        
         .bubble.ai {
-            background-color: var(--surface-color);
-            color: var(--on-surface-color);
+            background-color: #37373d;
+            color: #e2e2e6;
             border-bottom-left-radius: 6px;
         }
-        
-        .input-bar-container {
-            padding: 1rem 1rem 1.5rem 1rem;
-            background-color: var(--background-color);
-            width: 100%;
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #4b5563;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
         }
-        
+        .avatar.user img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar.bot svg {
+            width: 24px;
+            height: 24px;
+        }
+        .fade-out {
+            animation: fadeOut 0.4s ease-out forwards;
+        }
+        #sidebar {
+            transition: width 0.3s cubic-bezier(.4,2,.6,1);
+        }
+        #sidebar.expanded {
+            width: 220px !important;
+        }
+        @media (max-width: 1200px) {
+            .suggestions {
+                max-width: 100vw;
+                justify-content: center;
+            }
+            .suggestion-card {
+                min-width: 180px;
+                max-width: 320px;
+                flex: 1 1 180px;
+            }
+        }
+        @media (max-width: 900px) {
+            .suggestion-card {
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            .suggestions {
+                gap: 16px;
+            }
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 2rem;
+            background-color: #111015;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .app-title {
+            position: absolute;
+            top: 3rem;
+            left: 2.5rem;
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .landing-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .landing-inner {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .landing-inner h1,
+        .landing-inner .subtitle,
+        .landing-inner .suggestion-cards {
+            opacity: 0;
+            animation: fadeInSlideUp 0.6s ease-out forwards;
+        }
+
+        .landing-inner h1 { animation-delay: 0.2s; }
+        .landing-inner .subtitle { animation-delay: 0.3s; }
+        .landing-inner .suggestion-cards { animation-delay: 0.4s; }
+
+        .landing-content h1 {
+            font-size: 3.5rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+            background: -webkit-linear-gradient(45deg, #60a5fa, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .landing-content .subtitle {
+            font-size: 3.5rem;
+            font-weight: 500;
+            color: #e2e2e6;
+            margin-top: 0;
+            margin-bottom: 2.5rem;
+        }
+
+        .suggestion-cards {
+            display: flex;
+            gap: 1.2rem;
+            max-width: 900px;
+        }
+        .input-bar-container {
+            padding: 1rem 2rem 2rem 2rem;
+            background-color: #0d0d0d;
+            width: 100%;
+            box-sizing: border-box;
+        }
         .input-bar {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
             display: flex;
             align-items: center;
-            background-color: var(--surface-color);
-            border-radius: 28px;
-            padding: 4px 8px 4px 16px;
-            border: 1px solid var(--border-color);
-            transition: border-color 0.2s ease;
+            background-color: #18181b;
+            border-radius: 24px;
+            padding: 8px;
+            border: 1px solid #27272a;
+            transition: border-color 0.2s;
         }
-
         .input-bar:focus-within {
-            border-color: var(--secondary-color);
+             border-color: #52525b;
         }
-        
         #chat-input {
+            width: 100%;
             flex: 1;
+            min-height: 24px;
+            max-height: 200px;
             padding: 8px;
             background-color: transparent;
-            color: var(--on-surface-color);
+            color: #e4e4e7;
             font-size: 1rem;
             resize: none;
             border: none;
             outline: none;
-            max-height: 120px;
         }
-        
+        .input-icons {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 4px;
+        }
         .input-icons button {
             background: none;
             border: none;
             color: #71717a;
             cursor: pointer;
-            width: 44px;
-            height: 44px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s ease;
+            transition: color 0.2s, background-color 0.2s;
         }
-        
         .input-icons button:hover {
-            background-color: #282a2b;
+            color: #e4e4e7;
+            background-color: #27272a;
         }
-        
         #send-btn {
-            background-color: var(--primary-color);
+            background-color: #2563eb;
             color: white;
         }
-        
         #send-btn:hover {
-            background-color: #7a7fe9;
+            background-color: #3b82f6;
+            color: white;
         }
-        
         .footer-note {
             text-align: center;
-            color: var(--secondary-color);
-            font-size: 0.75rem;
-            padding-top: 0.5rem;
+            color: #52525b;
+            font-size: 0.8rem;
+            padding-top: 1rem;
             max-width: 800px;
             margin: 0 auto;
         }
-        
-        /* Mobile Optimizations */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: -90px;
+        .gradient-text {
+            background: -webkit-linear-gradient(45deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
             }
-            .sidebar.open { left: 0; }
-            .mobile-menu-btn { display: flex !important; }
-            .topbar { padding: 12px 16px; }
-            .main { padding-left: 0; margin-left: 0 !important; }
-            .main.expanded { margin-left: 0 !important; }
-            .hamburger-btn { display: none; } /* Hide desktop hamburger on mobile */
-            .input-bar-container { 
-                position: fixed;
-                bottom: 0;
-                left: 0; 
-                right: 0;
-                z-index: 1000;
-                border-top: 1px solid var(--border-color);
-                padding: 1rem;
-            }
-            .content-area {
-                padding-bottom: 120px;
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
             }
         }
     </style>
 </head>
 <body>
     <div class="layout">
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-top">
-                <form method="POST" action="/new_chat">
+        <div class="sidebar" id="sidebar" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100vh;">
+            <div class="sidebar-top" style="display: flex; flex-direction: column; align-items: center; gap: 28px; width: 100%;">
+                <div class="menu-icon" id="menu-btn" style="width:32px;height:32px;margin: 24px 0 0 0; display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <form method="POST" action="/new_chat" style="margin:0;padding:0;">
                     <button class="new-chat" title="Start new chat" type="submit">+</button>
                 </form>
             </div>
-            <div class="spacer"></div>
-            <div class="bottom-icons">
+            <div class="bottom-icons" style="display: flex; flex-direction: column; gap: 28px; margin-bottom: 32px; align-items: center; width: 100%;">
                 <div class="icon" title="Help">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13M12 17H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 <div class="icon" title="History">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 2L14 5M14 5L11 8M14 5H6.8C5.11984 5 4.27976 5 3.63803 5.32698C3.07354 5.6146 2.6146 6.07354 2.32698 6.63803C2 7.27976 2 8.11984 2 9.8V15.5C2 15.9644 2 16.1966 2.02567 16.3916C2.2029 17.7378 3.26222 18.7971 4.60842 18.9743C4.80337 19 5.03558 19 5.5 19M10 19H17.2C18.8802 19 19.7202 19 20.362 18.673C20.9265 18.3854 21.3854 17.9265 21.673 17.362C22 16.7202 22 15.8802 22 14.2V8.5C22 8.03558 22 7.80337 21.9743 7.60842C21.7971 6.26222 20.7378 5.2029 19.3916 5.02567C19.1966 5 18.9644 5 18.5 5M10 19L13 22M10 19L13 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 <div class="icon" title="Settings">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12.0005 15C13.6573 15 15.0005 13.6569 15.0005 12C15.0005 10.3431 13.6573 9 12.0005 9C10.3436 9 9.00049 10.3431 9.00049 12C9.00049 13.6569 10.3436 15 12.0005 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M9.28957 19.3711L9.87402 20.6856C10.0478 21.0768 10.3313 21.4093 10.6902 21.6426C11.0492 21.8759 11.4681 22.0001 11.8962 22C12.3244 22.0001 12.7433 21.8759 13.1022 21.6426C13.4612 21.4093 13.7447 21.0768 13.9185 20.6856L14.5029 19.3711C14.711 18.9047 15.0609 18.5159 15.5029 18.26C15.9477 18.0034 16.4622 17.8941 16.9729 17.9478L18.4029 18.1C18.8286 18.145 19.2582 18.0656 19.6396 17.8713C20.021 17.6771 20.3379 17.3763 20.5518 17.0056C20.766 16.635 20.868 16.2103 20.8455 15.7829C20.823 15.3555 20.677 14.9438 20.4251 14.5978L19.5785 13.4344C19.277 13.0171 19.1159 12.5148 19.1185 12C19.1184 11.4866 19.281 10.9864 19.5829 10.5711L20.4296 9.40778C20.6814 9.06175 20.8275 8.65007 20.85 8.22267C20.8725 7.79528 20.7704 7.37054 20.5562 7C20.3423 6.62923 20.0255 6.32849 19.644 6.13423C19.2626 5.93997 18.833 5.86053 18.4074 5.90556L16.9774 6.05778C16.4667 6.11141 15.9521 6.00212 15.5074 5.74556C15.0645 5.48825 14.7144 5.09736 14.5074 4.62889L13.9185 3.31444C13.7447 2.92317 13.4612 2.59072 13.1022 2.3574C12.7433 2.12408 12.3244 1.99993 11.8962 2C11.4681 1.99993 11.0492 2.12408 10.6902 2.3574C10.3313 2.59072 10.0478 2.92317 9.87402 3.31444L9.28957 4.62889C9.0825 5.09736 8.73245 5.48825 8.28957 5.74556C7.84479 6.00212 7.33024 6.11141 6.81957 6.05778L5.38513 5.90556C4.95946 5.86053 4.52987 5.93997 4.14844 6.13423C3.76702 6.32849 3.45014 6.62923 3.23624 7C3.02206 7.37054 2.92002 7.79528 2.94251 8.22267C2.96499 8.65007 2.96499 9.06175 3.36291 9.40778L4.20957 10.5711C4.51151 10.9864 4.67411 11.4866 4.67402 12C4.67411 12.5134 4.51151 13.0137 4.20957 13.4289L3.36291 14.5922C3.11103 14.9382 2.96499 15.3499 2.94251 15.7773C2.92002 16.2047 3.02206 16.6295 3.23624 17C3.45036 17.3706 3.76727 17.6712 4.14864 17.8654C4.53001 18.0596 4.95949 18.1392 5.38513 18.0944L6.81513 17.9422C7.3258 17.8886 7.84034 17.9979 8.28513 18.2544C8.72966 18.511 9.08134 18.902 9.28957 19.3711Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
             </div>
         </div>
-        
-        <div class="main" id="main-content">
+        <div class="main">
             <div class="topbar">
-                <div class="topbar-left">
-                    <button class="hamburger-btn" id="hamburger-btn">
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <button class="mobile-menu-btn" id="mobile-menu-btn-top">
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <h1 class="app-title">Dreamline</h1>
-                </div>
                 <div class="profile-avatar" id="profile-avatar" title="{{ session['user']['name'] }}">
                     <img src="{{ session['user']['picture'] }}" alt="User Avatar">
                 </div>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="/logout">Logout</a>
+                </div>
             </div>
-            
-            <div class="content-area">
-                {% if not memory or memory|length == 0 %}
-                <div id="landing-content">
-                    <div class="landing-inner">
-                        <div class="greeting-block">
-                            <p class="gradient-text">Hello, {{ username }}</p>
-                            <p class="normal-text">How can I help you today?</p>
-                        </div>
-                        <div class="suggestions">
-                            <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
-                            <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
-                            <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
-                        </div>
+            <h1 class="gradient-text app-title">Dreamline</h1>
+            {% if not memory or memory|length == 0 %}
+            <div id="landing-content" class="landing-content">
+                <div class="landing-inner">
+                    <h1>Hello, {{ username }}</h1>
+                    <p class="subtitle">How can I help you today?</p>
+                    <div class="suggestion-cards">
+                        <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
+                        <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
+                        <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
                     </div>
                 </div>
-                {% else %}
+            </div>
+            {% else %}
+            <div class="chat-history-container" id="chat-history-container">
                 <div class="chat-history" id="chat-history">
                     {% for message in memory %}
                         {% if message.startswith('User: ') %}
                         <div class="chat-row user">
                             <div class="bubble user">{{ message[6:] }}</div>
+                            <div class="avatar user">
+                                <img src="{{ session['user']['picture'] }}" alt="User Avatar">
+                            </div>
                         </div>
                         {% elif message.startswith('AI: ') %}
                         <div class="chat-row ai">
+                            <div class="avatar bot">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                    <circle cx="12" cy="12" r="6" fill="#1e40af" fill-opacity="0.5"/>
+                                    <circle cx="12" cy="12" r="2" fill="white"/>
+                                </svg>
+                            </div>
                             <div class="bubble ai">{{ message[4:] }}</div>
                         </div>
                         {% endif %}
                     {% endfor %}
                 </div>
-                {% endif %}
             </div>
-
+            {% endif %}
             <div class="input-bar-container">
                 <form id="chat-form" method="POST" class="input-bar" enctype="multipart/form-data">
                     <div class="input-icons">
                         <button type="button" id="attach-btn" title="Attach file">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99999 7.49996V12.5M7.49999 9.99996H12.5M17.5 9.99996C17.5 14.1421 14.1421 17.5 9.99999 17.5C5.85785 17.5 2.5 14.1421 2.5 9.99996C2.5 5.85781 5.85785 2.5 9.99999 2.5C14.1421 2.5 17.5 5.85781 17.5 9.99996Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
+                        <input type="file" name="file" id="file-input" style="display: none;" onchange="this.form.submit()">
                     </div>
                     <textarea name="message" id="chat-input" placeholder="Enter a prompt here" rows="1"></textarea>
                     <div class="input-icons">
                         <button type="button" id="mic-btn" title="Use microphone">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3ZM7 12a5 5 0 0 1 10 0v1h-1v-1a4 4 0 0 0-8 0v1H7v-1Zm10 3h-1v5a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-5H7v5a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-5Z" fill="currentColor"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99996 12.5C11.3807 12.5 12.5 11.3807 12.5 9.99996V5.83329C12.5 4.45259 11.3807 3.33329 9.99996 3.33329C8.61926 3.33329 7.5 4.45259 7.5 5.83329V9.99996C7.5 11.3807 8.61926 12.5 9.99996 12.5ZM15.8333 8.33329V9.99996C15.8333 13.2216 13.2216 15.8333 9.99996 15.8333C6.77826 15.8333 4.16663 13.2216 4.16663 9.99996V8.33329M9.99996 15.8333V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                         <button type="submit" id="send-btn" title="Send message">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 2.5L2.5 9.16667L8.33333 11.6667L10.8333 17.5L17.5 2.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                     </div>
                 </form>
@@ -505,62 +555,77 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- Sidebar Toggle ---
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        
-        const isSidebarCollapsed = () => localStorage.getItem('sidebarCollapsed') === 'true';
-
-        if (isSidebarCollapsed()) {
-            sidebar.classList.add('collapsed');
-            mainContent.classList.add('expanded');
-        }
-
-        hamburgerBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
-            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-        });
-
-
-        // --- Mobile menu functionality ---
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn-top');
-        const mobileSidebar = document.getElementById('sidebar'); 
-        
-        mobileMenuBtn.addEventListener('click', () => {
-             mobileSidebar.classList.toggle('open');
-        });
-        
         // Auto-resize textarea
         const textarea = document.getElementById('chat-input');
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            this.style.height = (this.scrollHeight) + 'px';
         });
 
-        // Scroll to bottom of chat history
-        const contentArea = document.querySelector('.content-area');
-        if(contentArea) {
-            contentArea.scrollTop = contentArea.scrollHeight;
+        // Attach button logic
+        var attachBtn = document.getElementById('attach-btn');
+        var fileInput = document.getElementById('file-input');
+        if (attachBtn && fileInput) {
+            attachBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
         }
 
-        // Enter to send
-        document.getElementById('chat-input').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                const form = document.getElementById('chat-form');
-                if (form) form.requestSubmit();
-            }
-        });
-
-        // Suggestion click
-        document.querySelectorAll('.suggestion-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.getElementById('chat-input').value = card.dataset.suggestion;
+        // Suggestion click logic
+        var suggestionCards = document.querySelectorAll('.suggestion-card');
+        suggestionCards.forEach(function(card) {
+            card.addEventListener('click', function() {
+                document.getElementById('chat-input').value = card.getAttribute('data-suggestion');
                 document.getElementById('chat-form').requestSubmit();
             });
         });
+
+        // On form submit, fade out landing content if it exists
+        var chatForm = document.getElementById('chat-form');
+        if (chatForm) {
+            chatForm.addEventListener('submit', function(e) {
+                var landing = document.getElementById('landing-content');
+                if (landing && window.getComputedStyle(landing).display !== 'none') {
+                    e.preventDefault();
+                    landing.classList.add('fade-out');
+                    landing.addEventListener('animationend', function() {
+                        chatForm.submit();
+                    }, { once: true });
+                }
+            });
+        }
+
+        // Scroll to bottom of chat history
+        var chatHistoryContainer = document.getElementById('chat-history-container');
+        if (chatHistoryContainer) {
+            chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
+        }
+
+        // Profile dropdown logic
+        var profileAvatar = document.getElementById('profile-avatar');
+        var profileDropdown = document.getElementById('profile-dropdown');
+        if (profileAvatar) {
+            profileAvatar.addEventListener('click', function(event) {
+                event.stopPropagation();
+                profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+        }
+        window.addEventListener('click', function(event) {
+            if (profileDropdown && profileDropdown.style.display === 'block') {
+                profileDropdown.style.display = 'none';
+            }
+        });
+
+        // Enter to submit
+        var chatInput = document.getElementById('chat-input');
+        if (chatInput) {
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    document.getElementById('chat-form').requestSubmit();
+                }
+            });
+        }
     });
     </script>
 </body>
