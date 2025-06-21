@@ -62,6 +62,7 @@ def chat():
     user_info = session["user"]
     username = user_info.get('name', 'User')
     user_id = get_or_create_user(username)
+    memory = get_memory(user_id)
 
     if request.method == "POST":
         user_input = request.form.get("message", "")
@@ -96,15 +97,10 @@ def chat():
 
         if user_input:
             save_message(user_id, f"User: {user_input}")
-            memory = get_memory(user_id)
             response = generate_response(user_input, memory)
             save_message(user_id, f"AI: {response}")
-            return jsonify({'response': response})
-        
-        return jsonify({'response': 'No input provided.'}), 400
+            memory = get_memory(user_id) # Refresh memory
 
-    # For GET requests, render the full page with chat history
-    memory = get_memory(user_id)
     return render_template("chat.html", username=username, memory=memory)
 
 @app.route("/new_chat", methods=["POST"])
