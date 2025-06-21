@@ -25,28 +25,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes card-fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes hero-content-fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
@@ -144,8 +122,15 @@
             padding: 4rem 0;
         }
 
-        .hero-content {
-            animation: hero-content-fade-in 0.8s ease-out forwards;
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .scroll-animate.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .hero h1 {
@@ -169,8 +154,6 @@
         
         .image-showcase-wrapper {
             margin-top: 4rem;
-            animation: hero-content-fade-in 0.8s ease-out 0.3s forwards;
-            opacity: 0;
         }
 
         .image-showcase {
@@ -237,17 +220,13 @@
             padding: 2rem;
             text-decoration: none;
             color: var(--text-bright);
-            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
             display: flex;
             flex-direction: column;
             text-align: left;
             backdrop-filter: blur(20px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, opacity 0.6s ease-out, transform 0.6s ease-out;
             opacity: 0;
-        }
-
-        .agent-card.in-view {
-            animation: card-fade-in 0.6s ease-out forwards;
         }
 
         .agent-card:hover {
@@ -318,14 +297,14 @@
         <main>
             <div class="container">
                 <section class="hero">
-                    <div class="hero-content">
+                    <div class="hero-content scroll-animate">
                         <h1>Meet Your Specialist AI Team</h1>
                         <p>One platform, seven specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
                         {% if not session.user %}
                             <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
                         {% endif %}
                     </div>
-                    <div class="image-showcase-wrapper">
+                    <div class="image-showcase-wrapper scroll-animate">
                         <div class="image-showcase">
                             <div class="browser-header">
                                 <div class="browser-dot red"></div>
@@ -341,10 +320,10 @@
 
                 {% if session.user %}
                 <section class="agent-showcase">
-                    <h2>Choose Your Agent</h2>
+                    <h2 class="scroll-animate">Choose Your Agent</h2>
                     <div class="agent-grid">
                         {% for agent_key, agent_info in agents.items() %}
-                        <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card">
+                        <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card scroll-animate">
                             <div>
                                 <div class="agent-name">{{ agent_info.name }}</div>
                                 <p class="agent-description">{{ agent_info.description }}</p>
@@ -375,20 +354,23 @@
                 });
             }
 
-            // Staggered Card Animation
-            const cards = document.querySelectorAll('.agent-card');
+            // Scroll-triggered Animations
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
+                entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.style.animationDelay = `${index * 100}ms`;
                         entry.target.classList.add('in-view');
-                        observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1 });
+            }, {
+                threshold: 0.2,
+            });
 
-            cards.forEach(card => {
-                observer.observe(card);
+            const elementsToAnimate = document.querySelectorAll('.scroll-animate');
+            elementsToAnimate.forEach((element, index) => {
+                if (element.classList.contains('agent-card')) {
+                    element.style.transitionDelay = `${index * 100}ms`;
+                }
+                observer.observe(element);
             });
             
             // 3D Showcase Effect
@@ -400,7 +382,9 @@
                     const x = (clientX - innerWidth / 2) / innerWidth;
                     const y = (clientY - innerHeight / 2) / innerHeight;
                     
-                    showcase.style.transform = `rotateX(${y * -30}deg) rotateY(${x * 30}deg) scale(1.02)`;
+                    if(showcase.classList.contains('in-view')) {
+                       showcase.style.transform = `rotateX(${y * -30}deg) rotateY(${x * 30}deg) scale(1.02)`;
+                    }
                 });
             }
         });
