@@ -308,6 +308,15 @@
             background-color: rgba(168, 85, 247, 0.1);
         }
 
+        .agent-card.premium-card {
+            border-color: #f59e0b;
+        }
+
+        .agent-card.premium-card:hover {
+            border-color: #fde047;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+        }
+
         .agent-card:hover {
             transform: translateY(-8px);
             border-color: rgba(168, 85, 247, 0.5);
@@ -495,6 +504,7 @@
                 <section id="agents" class="agent-showcase">
                     <h2 class="scroll-animate">Choose Your Agent</h2>
                     <div class="agent-grid">
+                        {% set regular_agent_index = 1 %}
                         {% for agent_key, agent_info in agents.items() %}
                             {% if agent_key == 'custom' %}
                                 <a href="{{ url_for('custom_agent') }}" class="agent-card scroll-animate custom-card">
@@ -504,14 +514,23 @@
                                     </div>
                                     <div class="arrow">→</div>
                                 </a>
-                            {% else %}
-                                <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card scroll-animate agent-card-{{ loop.index }}">
+                            {% elif agent_key == 'adaptive_agent' %}
+                                <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card scroll-animate premium-card">
                                     <div>
                                         <div class="agent-name">{{ agent_info.name }}</div>
                                         <p class="agent-description">{{ agent_info.description }}</p>
                                     </div>
                                     <div class="arrow">→</div>
                                 </a>
+                            {% else %}
+                                <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card scroll-animate agent-card-{{ regular_agent_index }}">
+                                    <div>
+                                        <div class="agent-name">{{ agent_info.name }}</div>
+                                        <p class="agent-description">{{ agent_info.description }}</p>
+                                    </div>
+                                    <div class="arrow">→</div>
+                                </a>
+                                {% set regular_agent_index = regular_agent_index + 1 %}
                             {% endif %}
                         {% endfor %}
                     </div>
