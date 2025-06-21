@@ -615,38 +615,6 @@
         if (chatForm) {
             chatForm.addEventListener('submit', function(e) {
                 var landing = document.getElementById('landing-content');
-                var message = document.getElementById('chat-input').value.trim();
-                
-                if (message) {
-                    // Create and append user message bubble
-                    var chatHistory = document.getElementById('chat-history');
-                    var userRow = document.createElement('div');
-                    userRow.className = 'chat-row user';
-                    
-                    var userBubble = document.createElement('div');
-                    userBubble.className = 'bubble user';
-                    userBubble.textContent = message;
-                    
-                    var userAvatar = document.createElement('div');
-                    userAvatar.className = 'avatar user';
-                    userAvatar.innerHTML = `<img src="{{ session['user']['picture'] }}" alt="User Avatar">`;
-                    
-                    userRow.appendChild(userBubble);
-                    userRow.appendChild(userAvatar);
-                    
-                    if(chatHistory) {
-                       chatHistory.appendChild(userRow);
-                    } else {
-                       var container = document.getElementById('chat-history-container');
-                       container.innerHTML = '<div class="chat-history" id="chat-history"></div>';
-                       document.getElementById('chat-history').appendChild(userRow);
-                    }
-                    
-                    // Scroll to bottom
-                    var chatHistoryContainer = document.getElementById('chat-history-container');
-                    chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
-                }
-
                 if (landing && window.getComputedStyle(landing).display !== 'none') {
                     e.preventDefault();
                     landing.classList.add('fade-out');
