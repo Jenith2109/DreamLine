@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DreamLine</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+            background: #f8fafc;
+            color: #222;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        .layout {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+        .sidebar {
+            width: 90px;
+            background: #f1f3f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 0 24px 0;
+            box-sizing: border-box;
+        }
+        .sidebar .logo {
+            font-weight: 500;
+            font-size: 1.3rem;
+            margin-bottom: 36px;
+            letter-spacing: 0.5px;
+            color: #222;
+        }
+        .sidebar .new-chat {
+            width: 44px;
+            height: 44px;
+            background: #e6e9f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.1rem;
+            color: #6366f1;
+            margin-bottom: 28px;
+            cursor: pointer;
+            border: none;
+        }
+        .sidebar .spacer {
+            flex: 1;
+        }
+        .sidebar .bottom-icons {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        .sidebar .bottom-icons .icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b0b3c7;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .sidebar .bottom-icons .icon:hover {
+            color: #6366f1;
+        }
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #fff;
+            overflow: hidden;
+        }
+        .topbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 36px 48px 0 48px;
+            box-sizing: border-box;
+        }
+        .logout-button {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            transition: all 0.2s ease-in-out;
+        }
+        .logout-button:hover {
+            background-color: #f1f1f1;
+            border-color: #ccc;
+        }
+        .profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #6366f1;
+            overflow: hidden;
+            box-shadow: 0 1px 4px 0 rgba(99,102,241,0.08);
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            height: 100%;
+            width: 100%;
+            padding-left: 120px;
+            padding-top: 60px;
+            box-sizing: border-box;
+        }
+        .greeting {
+            font-size: 3.2rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #6366f1 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+        .subheading {
+            font-size: 2.6rem;
+            color: #b0b3c7;
+            font-weight: 500;
+            margin-bottom: 2.8rem;
+            letter-spacing: 0.2px;
+        }
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            margin-bottom: 2.8rem;
+            justify-content: flex-start;
+            max-width: 1100px;
+            box-sizing: border-box;
+        }
+        .suggestion-card {
+            background: #f5f7fa;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px 0 rgba(60,72,88,0.04);
+            padding: 28px 22px 38px 22px;
+            min-width: 220px;
+            max-width: 260px;
+            width: 100%;
+            font-size: 1.13rem;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            height: 120px;
+            position: relative;
+            text-align: left;
+            word-break: break-word;
+            white-space: normal;
+            flex: 1 1 220px;
+            box-sizing: border-box;
+        }
+        .suggestion-card .icon {
+            position: absolute;
+            bottom: 16px;
+            right: 20px;
+            color: #b0b3c7;
+            font-size: 1.5rem;
+        }
+        .input-bar {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 38px;
+            background: transparent;
+        }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f1f3f9;
+            border-radius: 32px;
+            padding: 0 22px;
+            width: 600px;
+            box-shadow: 0 2px 8px 0 rgba(60,72,88,0.04);
+        }
+        .input-wrapper input[type="text"] {
+            border: none;
+            background: transparent;
+            font-size: 1.18rem;
+            padding: 22px 0;
+            flex: 1;
+            outline: none;
+            color: #888;
+        }
+        .input-wrapper .icon-btn {
+            background: none;
+            border: none;
+            color: #b0b3c7;
+            font-size: 1.5rem;
+            margin-left: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper .send-btn {
+            background: #6366f1;
+            color: #fff;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-left: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .input-wrapper .send-btn:hover {
+            background: #4f46e5;
+        }
+        .footer-note {
+            width: 100%;
+            text-align: center;
+            color: #b0b3c7;
+            font-size: 0.98rem;
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+        }
+        @media (max-width: 1100px) {
+            .center-content {
+                padding-left: 40px;
+                padding-top: 40px;
+            }
+            .input-wrapper {
+                width: 95vw;
+            }
+        }
+        .chat-history {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            padding-top: 40px;
+        }
+        .chat-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+        }
+        .chat-row.user {
+            justify-content: flex-end;
+        }
+        .chat-row.ai {
+            justify-content: flex-start;
+        }
+        .bubble {
+            border-radius: 18px;
+            padding: 1.2rem 1.5rem;
+            max-width: 420px;
+            font-size: 1.08rem;
+            word-break: break-word;
+            box-shadow: 0 2px 12px 0 rgba(60,72,88,0.10);
+        }
+        .bubble.user {
+            background: #e3f0ff;
+            color: #2563eb;
+            box-shadow: 0 2px 12px 0 rgba(37,99,235,0.08);
+        }
+        .bubble.ai {
+            background: #fff;
+            color: #222;
+            border: 1px solid #e5e7eb;
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px 0 rgba(99,102,241,0.08);
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+        .avatar.user img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .avatar.bot {
+            background: #e0e7ff;
+        }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        #sidebar {
+            transition: width 0.3s cubic-bezier(.4,2,.6,1);
+        }
+        #sidebar.expanded {
+            width: 220px !important;
+        }
+        @media (max-width: 1200px) {
+            .suggestions {
+                max-width: 100vw;
+                justify-content: center;
+            }
+            .suggestion-card {
+                min-width: 180px;
+                max-width: 320px;
+                flex: 1 1 180px;
+            }
+        }
+        @media (max-width: 900px) {
+            .suggestion-card {
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            .suggestions {
+                gap: 16px;
+            }
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .chat-scroll-area {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            width: 100%;
+        }
+        .chat-history {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            padding: 32px 0 32px 0;
+        }
+        /* Make sure your input bar stays at the bottom */
+        .input-bar {
+            flex-shrink: 0;
+            /* your existing styles */
+        }
+        .file-card {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 12px 18px;
+            margin-bottom: 8px;
+            width: fit-content;
+            gap: 12px;
+        }
+        .file-icon {
+            font-size: 2rem;
+            color: #ff4a6b;
+        }
+        .file-name {
+            font-weight: 600;
+        }
+        .file-type {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .remove-file {
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar" id="sidebar" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100vh;">
+            <div class="sidebar-top" style="display: flex; flex-direction: column; align-items: center; gap: 28px; width: 100%;">
+                <div class="menu-icon" id="menu-btn" style="width:32px;height:32px;margin: 24px 0 0 0; display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <form method="POST" action="/new_chat" style="margin:0;padding:0;">
+                    <button class="new-chat" title="Start new chat" type="submit">+</button>
+                </form>
+            </div>
+            <div class="bottom-icons" style="display: flex; flex-direction: column; gap: 28px; margin-bottom: 32px; align-items: center; width: 100%;">
+                <div class="icon" title="Help">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13M12 17H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="icon" title="History">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 2L14 5M14 5L11 8M14 5H6.8C5.11984 5 4.27976 5 3.63803 5.32698C3.07354 5.6146 2.6146 6.07354 2.32698 6.63803C2 7.27976 2 8.11984 2 9.8V15.5C2 15.9644 2 16.1966 2.02567 16.3916C2.2029 17.7378 3.26222 18.7971 4.60842 18.9743C4.80337 19 5.03558 19 5.5 19M10 19H17.2C18.8802 19 19.7202 19 20.362 18.673C20.9265 18.3854 21.3854 17.9265 21.673 17.362C22 16.7202 22 15.8802 22 14.2V8.5C22 8.03558 22 7.80337 21.9743 7.60842C21.7971 6.26222 20.7378 5.2029 19.3916 5.02567C19.1966 5 18.9644 5 18.5 5M10 19L13 22M10 19L13 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="icon" title="Settings">
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.0005 15C13.6573 15 15.0005 13.6569 15.0005 12C15.0005 10.3431 13.6573 9 12.0005 9C10.3436 9 9.00049 10.3431 9.00049 12C9.00049 13.6569 10.3436 15 12.0005 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.28957 19.3711L9.87402 20.6856C10.0478 21.0768 10.3313 21.4093 10.6902 21.6426C11.0492 21.8759 11.4681 22.0001 11.8962 22C12.3244 22.0001 12.7433 21.8759 13.1022 21.6426C13.4612 21.4093 13.7447 21.0768 13.9185 20.6856L14.5029 19.3711C14.711 18.9047 15.0609 18.5159 15.5029 18.26C15.9477 18.0034 16.4622 17.8941 16.9729 17.9478L18.4029 18.1C18.8286 18.145 19.2582 18.0656 19.6396 17.8713C20.021 17.6771 20.3379 17.3763 20.5518 17.0056C20.766 16.635 20.868 16.2103 20.8455 15.7829C20.823 15.3555 20.677 14.9438 20.4251 14.5978L19.5785 13.4344C19.277 13.0171 19.1159 12.5148 19.1185 12C19.1184 11.4866 19.281 10.9864 19.5829 10.5711L20.4296 9.40778C20.6814 9.06175 20.8275 8.65007 20.85 8.22267C20.8725 7.79528 20.7704 7.37054 20.5562 7C20.3423 6.62923 20.0255 6.32849 19.644 6.13423C19.2626 5.93997 18.833 5.86053 18.4074 5.90556L16.9774 6.05778C16.4667 6.11141 15.9521 6.00212 15.5074 5.74556C15.0645 5.48825 14.7144 5.09736 14.5074 4.62889L13.9185 3.31444C13.7447 2.92317 13.4612 2.59072 13.1022 2.3574C12.7433 2.12408 12.3244 1.99993 11.8962 2C11.4681 1.99993 11.0492 2.12408 10.6902 2.3574C10.3313 2.59072 10.0478 2.92317 9.87402 3.31444L9.28957 4.62889C9.0825 5.09736 8.73245 5.48825 8.28957 5.74556C7.84479 6.00212 7.33024 6.11141 6.81957 6.05778L5.38513 5.90556C4.95946 5.86053 4.52987 5.93997 4.14844 6.13423C3.76702 6.32849 3.45014 6.62923 3.23624 7C3.02206 7.37054 2.92002 7.79528 2.94251 8.22267C2.96499 8.65007 3.11103 9.06175 3.36291 9.40778L4.20957 10.5711C4.51151 10.9864 4.67411 11.4866 4.67402 12C4.67411 12.5134 4.51151 13.0137 4.20957 13.4289L3.36291 14.5922C3.11103 14.9382 2.96499 15.3499 2.94251 15.7773C2.92002 16.2047 3.02206 16.6295 3.23624 17C3.45036 17.3706 3.76727 17.6712 4.14864 17.8654C4.53001 18.0596 4.95949 18.1392 5.38513 18.0944L6.81513 17.9422C7.3258 17.8886 7.84034 17.9979 8.28513 18.2544C8.72966 18.511 9.08134 18.902 9.28957 19.3711Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="topbar">
+                <a href="/logout" class="logout-button">Logout</a>
+                <div class="profile-avatar" title="{{ session['user']['name'] }}">
+                    <img src="{{ session['user']['picture'] }}" alt="User Avatar">
+                </div>
+            </div>
+            {% if not memory or memory|length == 0 %}
+            <div class="center-content" id="landing-content">
+                <div class="app-title" style="font-size:3.2rem;font-weight:800;background:linear-gradient(90deg,#6366f1 0%,#ef4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-fill-color:transparent;letter-spacing:1px;margin-bottom:0.5rem;font-family:'Google Sans','Roboto',Arial,sans-serif;">Dreamline</div>
+                <div class="greeting" id="greeting">Hello, <span style="color:#ef4444;">{{ session['user']['given_name'] }}</span></div>
+                <div class="subheading" id="subheading">How can I help you today?</div>
+                <div class="suggestions" id="suggestions">
+                    <div class="suggestion-card" data-suggestion="Suggest beautiful places to see on an upcoming road trip">
+                        Suggest beautiful places to see on an upcoming road trip
+                        <span class="icon">&#9998;</span>
+                    </div>
+                    <div class="suggestion-card" data-suggestion="Briefly summarize this concept: urban planning">
+                        Briefly summarize this concept: urban planning
+                        <span class="icon">&#128161;</span>
+                    </div>
+                    <div class="suggestion-card" data-suggestion="Brainstorm team bonding activities for our work retreat">
+                        Brainstorm team bonding activities for our work retreat
+                        <span class="icon">&#128172;</span>
+                    </div>
+                    <div class="suggestion-card" data-suggestion="Tell me about React js and React native">
+                        Tell me about React js and React native
+                        <span class="icon">&#60;/&#62;</span>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="chat-scroll-area">
+                <div class="chat-history">
+        {% for msg in memory %}
+            {% if "User:" in msg %}
+                            <div class="chat-row user">
+                                <div class="bubble user">{{ msg.replace('User: ', '') }}</div>
+                                <div class="avatar user">
+                                    <img src="{{ session['user']['picture'] }}" alt="User Avatar">
+                                </div>
+                            </div>
+            {% elif "AI:" in msg %}
+                            <div class="chat-row ai">
+                                <div class="avatar bot">
+                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="11" cy="11" r="11" fill="#6366f1"/>
+                                        <ellipse cx="7.5" cy="11" rx="1.5" ry="2" fill="#fff"/>
+                                        <ellipse cx="14.5" cy="11" rx="1.5" ry="2" fill="#fff"/>
+                                        <ellipse cx="11" cy="15" rx="3" ry="1.2" fill="#a5b4fc"/>
+                                    </svg>
+                                </div>
+                                <div class="bubble ai">{{ msg.replace('AI: ', '') }}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <div class="input-area">
+                {% if uploaded_file %}
+                    <div class="file-card">
+                        <span class="file-icon">📄</span>
+                        <span class="file-name">{{ uploaded_file.filename }}</span>
+                        <span class="file-type">{{ uploaded_file.type }}</span>
+                        <button class="remove-file" onclick="window.location.href='{{ url_for('remove_file') }}'">×</button>
+                    </div>
+                {% endif %}
+                <form method="POST" class="input-bar" autocomplete="off" id="chat-form" enctype="multipart/form-data">
+                    <div class="input-wrapper">
+                        <button class="icon-btn" title="Attach" type="button" id="attach-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5 5.25581V16.5C17.5 19.5376 15.0376 22 12 22C8.96243 22 6.5 19.5376 6.5 16.5V5.66667C6.5 3.64162 8.14162 2 10.1667 2C12.1917 2 13.8333 3.64162 13.8333 5.66667V16.4457C13.8333 17.4583 13.0125 18.2791 12 18.2791C10.9875 18.2791 10.1667 17.4583 10.1667 16.4457V6.65116" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <input type="file" id="file-input" name="file" style="display:none;">
+                        <input type="text" name="message" id="chat-input" placeholder="Enter a prompt here" autocomplete="off" required />
+                        <button class="icon-btn" title="Mic" type="button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 10V12C19 15.866 15.866 19 12 19M5 10V12C5 15.866 8.13401 19 12 19M12 19V22M8 22H16M12 15C10.3431 15 9 13.6569 9 12V5C9 3.34315 10.3431 2 12 2C13.6569 2 15 3.34315 15 5V12C15 13.6569 13.6569 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="send-btn" title="Send" type="submit" id="send-btn">&#10148;</button>
+                    </div>
+                </form>
+            </div>
+            <div class="footer-note">
+                Dreamline may display inaccurate info, including about people, so double-check its responses. Your privacy and Dreamline Apps
+            </div>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Debug: log script loaded
+        console.log('Dreamline chat script loaded');
+        // Suggestion click logic
+        function setupSuggestions() {
+            var suggestionCards = document.querySelectorAll('.suggestion-card');
+            var chatInput = document.getElementById('chat-input');
+            suggestionCards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    if (chatInput) {
+                        chatInput.value = card.getAttribute('data-suggestion');
+                        chatInput.focus();
+                    }
+                });
+            });
+        }
+        setupSuggestions();
+        // Enter key submits form (handled by default), but also allow send button
+        var chatForm = document.getElementById('chat-form');
+        if (chatForm) {
+            chatForm.addEventListener('submit', function(e) {
+                var landing = document.getElementById('landing-content');
+                if (landing && !landing.classList.contains('fade-out')) {
+                    landing.classList.add('fade-out');
+                    setTimeout(function() {
+                        landing.style.display = 'none';
+                    }, 400);
+                }
+            });
+        }
+        // Sidebar expand/collapse
+        var menuBtn = document.getElementById('menu-btn');
+        var sidebar = document.getElementById('sidebar');
+        if (menuBtn && sidebar) {
+            menuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('expanded');
+            });
+        }
+        var attachBtn = document.getElementById('attach-btn');
+        var fileInput = document.getElementById('file-input');
+        var chatInput = document.getElementById('chat-input');
+        if (attachBtn && fileInput) {
+            attachBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    // Optionally show file name in input
+                    if (chatInput) chatInput.value = fileInput.files[0].name;
+                    chatForm.submit();
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
