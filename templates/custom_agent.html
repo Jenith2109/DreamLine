@@ -16,7 +16,6 @@
             --text-primary: #f0f0f0;
             --text-secondary: #a0a0a0;
             --card-bg: rgba(22, 22, 22, 0.5);
-            --logo-gradient: linear-gradient(90deg, #a855f7, #ec4899);
             --input-bg: rgba(255, 255, 255, 0.05);
             --button-bg: #a855f7;
             --button-hover-bg: #9333ea;
@@ -27,6 +26,11 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -34,7 +38,6 @@
             color: var(--text-primary);
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -56,25 +59,24 @@
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 2rem;
             z-index: 1;
         }
         
-        .creator-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 3rem;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-            text-align: center;
+        .creator-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            opacity: 0;
+            animation: fade-in-up 0.8s 0.2s ease-out forwards;
         }
         
-        .creator-box h1 {
+        .form-content h1 {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-size: clamp(2rem, 5vw, 2.8rem);
             font-weight: 800;
             line-height: 1.2;
             margin: 0 auto 1rem auto;
@@ -83,17 +85,15 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .creator-box p {
+        .form-content p {
             font-size: 1.1rem;
             color: var(--text-secondary);
-            max-width: 600px;
             margin: 0 auto 2.5rem auto;
             line-height: 1.6;
         }
         
         .form-group {
             margin-bottom: 2rem;
-            text-align: left;
         }
         
         .form-group label {
@@ -114,6 +114,7 @@
             color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
         }
 
         .form-input:focus, .form-textarea:focus {
@@ -123,13 +124,19 @@
         }
 
         .form-textarea {
-            min-height: 150px;
+            min-height: 200px;
             resize: vertical;
         }
         
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
         .submit-btn {
             display: inline-block;
-            width: 100%;
+            flex-grow: 1;
             padding: 1rem 2rem;
             font-size: 1rem;
             font-weight: 600;
@@ -140,6 +147,7 @@
             text-decoration: none;
             cursor: pointer;
             transition: background-color 0.2s ease;
+            text-align: center;
         }
         
         .submit-btn:hover {
@@ -147,8 +155,6 @@
         }
         
         .back-link {
-            display: inline-block;
-            margin-top: 1.5rem;
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.9rem;
@@ -158,28 +164,124 @@
             color: var(--text-primary);
         }
 
+        /* Preview Card Styles */
+        .preview-pane {
+            perspective: 1500px;
+        }
+        
+        .agent-card-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-bright);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease;
+            height: 250px;
+            justify-content: space-between;
+        }
+        
+        .agent-name-preview {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .agent-description-preview {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .arrow-preview {
+            align-self: flex-end;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 900px) {
+            .creator-grid {
+                grid-template-columns: 1fr;
+            }
+            .preview-pane {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="background-glow"></div>
     <div class="container">
-        <div class="creator-box">
-            <h1>Create Your Agent</h1>
-            <p>Define the personality and expertise of your specialist AI. Be as detailed as you want.</p>
-            
-            <form method="POST" action="{{ url_for('custom_agent') }}">
-                <div class="form-group">
-                    <label for="agent_name">Agent Name</label>
-                    <input type="text" id="agent_name" name="agent_name" class="form-input" placeholder="e.g., 'Marketing Guru' or 'Stoic Philosopher'" value="{{ agent_name }}">
+        <div class="creator-grid">
+            <div class="form-content">
+                <h1>Design Your Agent</h1>
+                <p>Build a specialist AI by giving it a name and defining its unique personality, purpose, and expertise. Be as creative and detailed as you want.</p>
+                
+                <form method="POST" action="{{ url_for('custom_agent') }}">
+                    <div class="form-group">
+                        <label for="agent_name">Agent Name</label>
+                        <input type="text" id="agent_name" name="agent_name" class="form-input" value="{{ agent_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="agent_prompt">Agent Prompt & Personality</label>
+                        <textarea id="agent_prompt" name="agent_prompt" class="form-textarea">{{ agent_prompt }}</textarea>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="submit-btn">Save & Start Chatting</button>
+                        <a href="{{ url_for('index') }}" class="back-link">Cancel</a>
+                    </div>
+                </form>
+            </div>
+            <div class="preview-pane">
+                <div class="agent-card-preview">
+                    <div>
+                        <div id="agent-name-preview" class="agent-name-preview">Your Agent Name</div>
+                        <p class="agent-description-preview">This is how your agent will appear on the selection screen.</p>
+                    </div>
+                    <div class="arrow-preview">→</div>
                 </div>
-                <div class="form-group">
-                    <label for="agent_prompt">Agent Prompt</label>
-                    <textarea id="agent_prompt" name="agent_prompt" class="form-textarea" placeholder="Describe how your agent should behave. What is its purpose? What is its personality?">{{ agent_prompt }}</textarea>
-                </div>
-                <button type="submit" class="submit-btn">Save & Start Chatting</button>
-            </form>
-            <a href="{{ url_for('index') }}" class="back-link">Back to Agent Selection</a>
+            </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const agentNameInput = document.getElementById('agent_name');
+            const agentNamePreview = document.getElementById('agent-name-preview');
+            const agentPromptTextarea = document.getElementById('agent_prompt');
+
+            const placeholders = [
+                "e.g., You are a NASA flight director during the Apollo missions. You are calm under pressure, an expert in astrophysics, and speak in clear, concise technical terms.",
+                "e.g., You are a grumpy, sarcastic cat. You complain about everything but secretly enjoy helping the user with their trivial human problems.",
+                "e.g., You are a wise, ancient librarian who has read every book in existence. You answer questions in a thoughtful, literary style and often cite fictional and non-fictional works.",
+                "e.g., You are a hyper-enthusiastic startup founder from Silicon Valley. You speak in buzzwords and are relentlessly optimistic about every idea."
+            ];
+            let currentPlaceholder = 0;
+
+            function updatePreview() {
+                const name = agentNameInput.value.trim();
+                agentNamePreview.textContent = name ? name : 'Your Agent Name';
+            }
+
+            function cyclePlaceholder() {
+                agentPromptTextarea.placeholder = placeholders[currentPlaceholder];
+                currentPlaceholder = (currentPlaceholder + 1) % placeholders.length;
+            }
+
+            agentNameInput.addEventListener('input', updatePreview);
+            
+            // Set initial placeholder and cycle it
+            cyclePlaceholder();
+            setInterval(cyclePlaceholder, 5000);
+
+            // Set initial state from backend
+            updatePreview();
+        });
+    </script>
 </body>
 </html> 
