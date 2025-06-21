@@ -284,7 +284,7 @@
 
         .app-title {
             position: absolute;
-            top: 2.5rem;
+            top: 3rem;
             left: 2.5rem;
             margin: 0;
             font-size: 1.8rem;
@@ -292,17 +292,38 @@
         }
 
         .landing-content {
+            flex: 1;
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .landing-inner {
             width: 100%;
-            padding-left: 120px;
-            padding-top: 60px;
-            box-sizing: border-box;
             max-width: 800px;
         }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .landing-inner h1,
+        .landing-inner .subtitle,
+        .landing-inner .suggestion-cards {
+            opacity: 0;
+            animation: fadeInSlideUp 0.6s ease-out forwards;
+        }
+
+        .landing-inner h1 { animation-delay: 0.2s; }
+        .landing-inner .subtitle { animation-delay: 0.3s; }
+        .landing-inner .suggestion-cards { animation-delay: 0.4s; }
 
         .landing-content h1 {
             font-size: 3.5rem;
@@ -455,12 +476,14 @@
             <h1 class="gradient-text app-title">Dreamline</h1>
             {% if not memory or memory|length == 0 %}
             <div id="landing-content" class="landing-content">
-                <h1>Hello, {{ username }}</h1>
-                <p class="subtitle">How can I help you today?</p>
-                <div class="suggestion-cards">
-                    <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
-                    <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
-                    <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
+                <div class="landing-inner">
+                    <h1>Hello, {{ username }}</h1>
+                    <p class="subtitle">How can I help you today?</p>
+                    <div class="suggestion-cards">
+                        <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
+                        <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
+                        <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
+                    </div>
                 </div>
             </div>
             {% else %}
