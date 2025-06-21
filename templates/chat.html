@@ -10,19 +10,28 @@
     <link rel="apple-touch-icon" href="/static/icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
         
+        :root {
+            --background-color: #0d0d0d;
+            --surface-color: #1e1f20;
+            --on-surface-color: #e8eaed;
+            --primary-color: #8990f6;
+            --secondary-color: #5f6368;
+            --border-color: #3c4043;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0d0d0d;
-            color: #e4e4e7;
+            font-family: 'Google Sans', sans-serif;
+            background: var(--background-color);
+            color: var(--on-surface-color);
             height: 100vh;
             width: 100vw;
             overflow: hidden;
@@ -43,34 +52,34 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 0 24px 0;
+            padding: 24px 0;
             box-sizing: border-box;
             border-right: 1px solid #262626;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
+            z-index: 2000;
         }
         
         .sidebar .new-chat {
             width: 44px;
             height: 44px;
-            background: #27272a;
+            background: var(--surface-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.1rem;
             color: #a1a1aa;
-            margin-bottom: 28px;
             cursor: pointer;
             border: none;
             transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
         }
         
-        .sidebar .new-chat:hover,
-        .sidebar .new-chat:active {
+        .sidebar .new-chat:hover {
             background: #3f3f46;
-            transform: scale(0.95);
+        }
+
+        .sidebar .spacer {
+            flex: 1;
         }
         
         .sidebar .bottom-icons {
@@ -89,21 +98,19 @@
             font-size: 1.5rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
         }
         
-        .sidebar .bottom-icons .icon:hover,
-        .sidebar .bottom-icons .icon:active {
-            color: #e4e4e7;
-            transform: scale(1.1);
+        .sidebar .bottom-icons .icon:hover {
+            color: var(--on-surface-color);
         }
         
         .main {
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: #0d0d0d;
+            background: var(--background-color);
             height: 100vh;
+            overflow: hidden;
         }
         
         .topbar {
@@ -113,32 +120,24 @@
             align-items: center;
             padding: 16px 24px;
             box-sizing: border-box;
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid #262626;
-            z-index: 100;
             flex-shrink: 0;
+            z-index: 100;
         }
         
         .mobile-menu-btn {
             display: none;
-            width: 32px;
-            height: 32px;
             background: none;
             border: none;
-            color: #e4e4e7;
+            color: var(--on-surface-color);
             cursor: pointer;
             padding: 0;
-            align-items: center;
-            justify-content: center;
         }
         
         .app-title {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             margin: 0;
-            background: linear-gradient(90deg, #6366f1 0%, #ef4444 100%);
+            background: linear-gradient(90deg, #8990f6 0%, #d164e8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -148,18 +147,8 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
             cursor: pointer;
-            border: 2px solid #3f3f46;
-            transition: all 0.2s ease;
-        }
-        
-        .profile-avatar:hover {
-            border-color: #52525b;
-            transform: scale(1.05);
+            border: 2px solid var(--border-color);
         }
         
         .profile-avatar img {
@@ -169,146 +158,93 @@
             border-radius: 50%;
         }
         
-        .profile-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 24px;
-            background: #18181b;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            border: 1px solid #27272a;
-            padding: 8px;
-            z-index: 1000;
-            display: none;
-            min-width: 120px;
-        }
-        
-        .profile-dropdown a {
-            display: block;
-            padding: 12px 16px;
-            color: #e4e4e7;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
-        }
-        
-        .profile-dropdown a:hover {
-            background-color: #27272a;
-        }
-        
-        .center-content {
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            height: 100%;
+            padding-bottom: 90px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-color) var(--background-color);
+        }
+
+        .content-area::-webkit-scrollbar { width: 8px; }
+        .content-area::-webkit-scrollbar-track { background: var(--background-color); }
+        .content-area::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 4px; }
+        
+        #landing-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .landing-inner {
+            max-width: 800px;
             width: 100%;
-            padding: 24px;
-            box-sizing: border-box;
+            margin: 0 auto;
         }
         
-        .greeting {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: bold;
-            background: linear-gradient(90deg, #6366f1 0%, #ef4444 100%);
+        .greeting-block {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .greeting-block .gradient-text {
+            background: linear-gradient(to right, #8990f6, #d164e8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.5px;
+            padding-bottom: 0.5rem;
         }
-        
-        .subheading {
-            font-size: clamp(1.5rem, 4vw, 2.6rem);
-            color: #a1a1aa;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            letter-spacing: 0.2px;
+
+        .greeting-block .normal-text {
+            color: var(--secondary-color);
         }
-        
+
         .suggestions {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
             width: 100%;
-            max-width: 900px;
+            margin-top: 3rem;
         }
         
         .suggestion-card {
-            background: #18181b;
-            border: 1px solid #27272a;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 1.2rem;
+            padding: 1rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: #a1a1aa;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            -webkit-tap-highlight-color: transparent;
+            color: var(--on-surface-color);
         }
         
-        .suggestion-card:hover,
-        .suggestion-card:active {
-            border-color: #52525b;
-            background: #27272a;
-            transform: translateY(-2px);
+        .suggestion-card:hover {
+            border-color: var(--secondary-color);
+            background: #282a2b;
         }
-        
-        .chat-history-container {
-            flex: 1;
-            overflow-y: scroll;
-            padding: 1rem 0;
-            display: flex;
-            flex-direction: column;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: #52525b #0d0d0d;
-        }
-        
-        .chat-history-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .chat-history-container::-webkit-scrollbar-track {
-            background: #0d0d0d;
-        }
-        
-        .chat-history-container::-webkit-scrollbar-thumb {
-            background: #52525b;
-            border-radius: 4px;
-        }
-        
-        .chat-history-container::-webkit-scrollbar-thumb:hover {
-            background: #71717a;
-        }
-        
+
         .chat-history {
-            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
             gap: 1rem;
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 0 1rem;
-            box-sizing: border-box;
+            padding: 1rem;
         }
         
         .chat-row {
             display: flex;
             align-items: flex-end;
             gap: 12px;
-            animation: fadeInUp 0.3s ease-out;
         }
         
-        .chat-row.user {
-            justify-content: flex-end;
-        }
-        
-        .chat-row.ai {
-            justify-content: flex-start;
-        }
+        .chat-row.user { justify-content: flex-end; }
+        .chat-row.ai { justify-content: flex-start; }
         
         .bubble {
             padding: 12px 18px;
@@ -317,7 +253,6 @@
             font-size: 0.95rem;
             line-height: 1.5;
             word-wrap: break-word;
-            overflow-wrap: break-word;
         }
         
         .bubble.user {
@@ -327,88 +262,43 @@
         }
         
         .bubble.ai {
-            background-color: #37373d;
-            color: #e2e2e6;
+            background-color: var(--surface-color);
+            color: var(--on-surface-color);
             border-bottom-left-radius: 6px;
         }
         
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #4b5563;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        
-        .avatar.user img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .avatar.bot svg {
-            width: 24px;
-            height: 24px;
-        }
-        
         .input-bar-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             padding: 1rem;
-            background-color: #0d0d0d;
+            background-color: var(--background-color);
             width: 100%;
-            box-sizing: border-box;
-            border-top: 1px solid #262626;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 50;
+            z-index: 1000;
         }
         
         .input-bar {
             max-width: 800px;
             margin: 0 auto;
-            position: relative;
             display: flex;
-            align-items: flex-end;
-            background-color: #18181b;
-            border-radius: 24px;
+            align-items: center;
+            background-color: var(--surface-color);
+            border-radius: 28px;
             padding: 8px;
-            border: 1px solid #27272a;
-            transition: all 0.2s ease;
-        }
-        
-        .input-bar:focus-within {
-            border-color: #52525b;
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+            border: 1px solid var(--border-color);
         }
         
         #chat-input {
-            width: 100%;
             flex: 1;
-            min-height: 24px;
-            max-height: 120px;
             padding: 8px;
             background-color: transparent;
-            color: #e4e4e7;
+            color: var(--on-surface-color);
             font-size: 1rem;
             resize: none;
             border: none;
             outline: none;
-            font-family: inherit;
-            line-height: 1.4;
-        }
-        
-        #chat-input::placeholder {
-            color: #71717a;
-        }
-        
-        .input-icons {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 0 4px;
+            max-height: 120px;
         }
         
         .input-icons button {
@@ -422,83 +312,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .input-icons button:hover,
-        .input-icons button:active {
-            color: #e4e4e7;
-            background-color: #27272a;
-            transform: scale(1.05);
         }
         
         #send-btn {
-            background-color: #2563eb;
+            background-color: var(--primary-color);
             color: white;
-        }
-        
-        #send-btn:hover,
-        #send-btn:active {
-            background-color: #3b82f6;
-            color: white;
-            transform: scale(1.05);
         }
         
         .footer-note {
             text-align: center;
-            color: #52525b;
+            color: var(--secondary-color);
             font-size: 0.75rem;
             padding-top: 0.5rem;
             max-width: 800px;
             margin: 0 auto;
-            line-height: 1.4;
-        }
-        
-        .gradient-text {
-            background: linear-gradient(90deg, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .landing-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-        
-        .landing-inner {
-            width: 100%;
-            max-width: 800px;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-        }
-        
-        .fade-out {
-            animation: fadeOut 0.4s ease-out forwards;
         }
         
         /* Mobile Optimizations */
@@ -506,173 +333,12 @@
             .sidebar {
                 position: fixed;
                 left: -90px;
-                top: 0;
-                height: 100vh;
-                z-index: 2000;
-                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
-            
-            .sidebar.open {
-                left: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: flex !important;
-            }
-            
-            .topbar {
-                padding: 12px 16px;
-            }
-            
-            .app-title {
-                font-size: 1.3rem;
-            }
-            
-            .profile-avatar {
-                width: 36px;
-                height: 36px;
-            }
-            
-            .center-content {
-                padding: 16px;
-            }
-            
-            .suggestions {
-                grid-template-columns: 1fr;
-                gap: 0.8rem;
-            }
-            
-            .suggestion-card {
-                padding: 1rem;
-                font-size: 0.85rem;
-            }
-            
-            .chat-history {
-                padding: 0 0.5rem;
-            }
-            
-            .bubble {
-                max-width: 90%;
-                font-size: 0.9rem;
-                padding: 10px 16px;
-            }
-            
-            .input-bar-container {
-                padding: 0.8rem;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background-color: #0d0d0d;
-                z-index: 1000;
-            }
-            
-            .input-bar {
-                border-radius: 20px;
-            }
-            
-            .input-icons button {
-                width: 32px;
-                height: 32px;
-            }
-            
-            .footer-note {
-                font-size: 0.7rem;
-                padding-top: 0.3rem;
-            }
-            
-            /* Ensure proper layout on mobile */
-            .main {
-                padding-bottom: 80px; /* Space for fixed input bar */
-            }
-            
-            .chat-history-container {
-                padding-bottom: 1rem;
-            }
-        }
-        
-        /* Tablet Optimizations */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .sidebar {
-                width: 80px;
-            }
-            
-            .center-content {
-                padding: 20px;
-            }
-            
-            .suggestions {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-            
-            .chat-history {
-                padding: 0 0.8rem;
-            }
-            
-            .bubble {
-                max-width: 80%;
-            }
-        }
-        
-        /* Large Screen Optimizations */
-        @media (min-width: 1025px) {
-            .center-content {
-                padding-left: 120px;
-                padding-top: 60px;
-            }
-            
-            .suggestions {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        /* Touch Device Optimizations */
-        @media (hover: none) and (pointer: coarse) {
-            .suggestion-card:hover {
-                transform: none;
-            }
-            
-            .input-icons button:hover {
-                transform: none;
-            }
-            
-            .profile-avatar:hover {
-                transform: none;
-            }
-            
-            .sidebar .new-chat:hover,
-            .sidebar .bottom-icons .icon:hover {
-                transform: none;
-            }
-        }
-        
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: #0d0d0d;
-                color: #e4e4e7;
-            }
-        }
-        
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .bubble.user {
-                background-color: #1d4ed8;
-            }
-            
-            .bubble.ai {
-                background-color: #52525b;
-            }
-        }
-        
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+            .sidebar.open { left: 0; }
+            .mobile-menu-btn { display: flex !important; }
+            .topbar { padding: 12px 16px; }
+            .main { padding-left: 0; }
+            .input-bar-container { left: 0; }
         }
     </style>
 </head>
@@ -680,28 +346,24 @@
     <div class="layout">
         <div class="sidebar" id="sidebar">
             <div class="sidebar-top">
-                <button class="mobile-menu-btn" id="mobile-menu-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <form method="POST" action="/new_chat" style="margin:0;padding:0;">
+                <form method="POST" action="/new_chat">
                     <button class="new-chat" title="Start new chat" type="submit">+</button>
                 </form>
             </div>
+            <div class="spacer"></div>
             <div class="bottom-icons">
                 <div class="icon" title="Help">
-                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13M12 17H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 <div class="icon" title="History">
-                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 2L14 5M14 5L11 8M14 5H6.8C5.11984 5 4.27976 5 3.63803 5.32698C3.07354 5.6146 2.6146 6.07354 2.32698 6.63803C2 7.27976 2 8.11984 2 9.8V15.5C2 15.9644 2 16.1966 2.02567 16.3916C2.2029 17.7378 3.26222 18.7971 4.60842 18.9743C4.80337 19 5.03558 19 5.5 19M10 19H17.2C18.8802 19 19.7202 19 20.362 18.673C20.9265 18.3854 21.3854 17.9265 21.673 17.362C22 16.7202 22 15.8802 22 14.2V8.5C22 8.03558 22 7.80337 21.9743 7.60842C21.7971 6.26222 20.7378 5.2029 19.3916 5.02567C19.1966 5 18.9644 5 18.5 5M10 19L13 22M10 19L13 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 <div class="icon" title="Settings">
-                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12.0005 15C13.6573 15 15.0005 13.6569 15.0005 12C15.0005 10.3431 13.6573 9 12.0005 9C10.3436 9 9.00049 10.3431 9.00049 12C9.00049 13.6569 10.3436 15 12.0005 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M9.28957 19.3711L9.87402 20.6856C10.0478 21.0768 10.3313 21.4093 10.6902 21.6426C11.0492 21.8759 11.4681 22.0001 11.8962 22C12.3244 22.0001 12.7433 21.8759 13.1022 21.6426C13.4612 21.4093 13.7447 21.0768 13.9185 20.6856L14.5029 19.3711C14.711 18.9047 15.0609 18.5159 15.5029 18.26C15.9477 18.0034 16.4622 17.8941 16.9729 17.9478L18.4029 18.1C18.8286 18.145 19.2582 18.0656 19.6396 17.8713C20.021 17.6771 20.3379 17.3763 20.5518 17.0056C20.766 16.635 20.868 16.2103 20.8455 15.7829C20.823 15.3555 20.677 14.9438 20.4251 14.5978L19.5785 13.4344C19.277 13.0171 19.1159 12.5148 19.1185 12C19.1184 11.4866 19.281 10.9864 19.5829 10.5711L20.4296 9.40778C20.6814 9.06175 20.8275 8.65007 20.85 8.22267C20.8725 7.79528 20.7704 7.37054 20.5562 7C20.3423 6.62923 20.0255 6.32849 19.644 6.13423C19.2626 5.93997 18.833 5.86053 18.4074 5.90556L16.9774 6.05778C16.4667 6.11141 15.9521 6.00212 15.5074 5.74556C15.0645 5.48825 14.7144 5.09736 14.5074 4.62889L13.9185 3.31444C13.7447 2.92317 13.4612 2.59072 13.1022 2.3574C12.7433 2.12408 12.3244 1.99993 11.8962 2C11.4681 1.99993 11.0492 2.12408 10.6902 2.3574C10.3313 2.59072 10.0478 2.92317 9.87402 3.31444L9.28957 4.62889C9.0825 5.09736 8.73245 5.48825 8.28957 5.74556C7.84479 6.00212 7.33024 6.11141 6.81957 6.05778L5.38513 5.90556C4.95946 5.86053 4.52987 5.93997 4.14844 6.13423C3.76702 6.32849 3.45014 6.62923 3.23624 7C3.02206 7.37054 2.92002 7.79528 2.94251 8.22267C2.96499 8.65007 2.96499 9.06175 3.36291 9.40778L4.20957 10.5711C4.51151 10.9864 4.67411 11.4866 4.67402 12C4.67411 12.5134 4.51151 13.0137 4.20957 13.4289L3.36291 14.5922C3.11103 14.9382 2.96499 15.3499 2.94251 15.7773C2.92002 16.2047 3.02206 16.6295 3.23624 17C3.45036 17.3706 3.76727 17.6712 4.14864 17.8654C4.53001 18.0596 4.95949 18.1392 5.38513 18.0944L6.81513 17.9422C7.3258 17.8886 7.84034 17.9979 8.28513 18.2544C8.72966 18.511 9.08134 18.902 9.28957 19.3711Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -709,10 +371,10 @@
             </div>
         </div>
         
-        <div class="main">
+        <div class="main" id="main-content">
             <div class="topbar">
                 <button class="mobile-menu-btn" id="mobile-menu-btn-top">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
@@ -720,66 +382,54 @@
                 <div class="profile-avatar" id="profile-avatar" title="{{ session['user']['name'] }}">
                     <img src="{{ session['user']['picture'] }}" alt="User Avatar">
                 </div>
-                <div class="profile-dropdown" id="profile-dropdown">
-                    <a href="/logout">Logout</a>
-                </div>
             </div>
             
-            {% if not memory or memory|length == 0 %}
-            <div id="landing-content" class="landing-content">
-                <div class="landing-inner">
-                    <h1 class="greeting">Hello, {{ username }}</h1>
-                    <p class="subheading">How can I help you today?</p>
-                    <div class="suggestions">
-                        <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
-                        <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
-                        <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
+            <div class="content-area">
+                {% if not memory or memory|length == 0 %}
+                <div id="landing-content">
+                    <div class="landing-inner">
+                        <div class="greeting-block">
+                            <p class="gradient-text">Hello, {{ username }}</p>
+                            <p class="normal-text">How can I help you today?</p>
+                        </div>
+                        <div class="suggestions">
+                            <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
+                            <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
+                            <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% else %}
-            <div class="chat-history-container" id="chat-history-container">
+                {% else %}
                 <div class="chat-history" id="chat-history">
                     {% for message in memory %}
                         {% if message.startswith('User: ') %}
                         <div class="chat-row user">
                             <div class="bubble user">{{ message[6:] }}</div>
-                            <div class="avatar user">
-                                <img src="{{ session['user']['picture'] }}" alt="User Avatar">
-                            </div>
                         </div>
                         {% elif message.startswith('AI: ') %}
                         <div class="chat-row ai">
-                            <div class="avatar bot">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
-                                    <circle cx="12" cy="12" r="6" fill="#1e40af" fill-opacity="0.5"/>
-                                    <circle cx="12" cy="12" r="2" fill="white"/>
-                                </svg>
-                            </div>
                             <div class="bubble ai">{{ message[4:] }}</div>
                         </div>
                         {% endif %}
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
-            {% endif %}
-            
+
             <div class="input-bar-container">
                 <form id="chat-form" method="POST" class="input-bar" enctype="multipart/form-data">
                     <div class="input-icons">
                         <button type="button" id="attach-btn" title="Attach file">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99999 7.49996V12.5M7.49999 9.99996H12.5M17.5 9.99996C17.5 14.1421 14.1421 17.5 9.99999 17.5C5.85785 17.5 2.5 14.1421 2.5 9.99996C2.5 5.85781 5.85785 2.5 9.99999 2.5C14.1421 2.5 17.5 5.85781 17.5 9.99996Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
-                        <input type="file" name="file" id="file-input" style="display: none;" onchange="this.form.submit()">
                     </div>
                     <textarea name="message" id="chat-input" placeholder="Enter a prompt here" rows="1"></textarea>
                     <div class="input-icons">
                         <button type="button" id="mic-btn" title="Use microphone">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99996 12.5C11.3807 12.5 12.5 11.3807 12.5 9.99996V5.83329C12.5 4.45259 11.3807 3.33329 9.99996 3.33329C8.61926 3.33329 7.5 4.45259 7.5 5.83329V9.99996C7.5 11.3807 8.61926 12.5 9.99996 12.5ZM15.8333 8.33329V9.99996C15.8333 13.2216 13.2216 15.8333 9.99996 15.8333C6.77826 15.8333 4.16663 13.2216 4.16663 9.99996V8.33329M9.99996 15.8333V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3ZM7 12a5 5 0 0 1 10 0v1h-1v-1a4 4 0 0 0-8 0v1H7v-1Zm10 3h-1v5a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-5H7v5a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-5Z" fill="currentColor"/></svg>
                         </button>
                         <button type="submit" id="send-btn" title="Send message">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 2.5L2.5 9.16667L8.33333 11.6667L10.8333 17.5L17.5 2.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/></svg>
                         </button>
                     </div>
                 </form>
@@ -789,46 +439,20 @@
             </div>
         </div>
     </div>
-    
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Mobile menu functionality
         const mobileMenuBtns = document.querySelectorAll('#mobile-menu-btn, #mobile-menu-btn-top');
         const sidebar = document.getElementById('sidebar');
-        const overlay = document.createElement('div');
-        
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1500;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        `;
-        document.body.appendChild(overlay);
+        const mainContent = document.getElementById('main-content');
         
         function toggleSidebar() {
-            const isOpen = sidebar.classList.contains('open');
-            if (isOpen) {
-                sidebar.classList.remove('open');
-                overlay.style.opacity = '0';
-                overlay.style.visibility = 'hidden';
-            } else {
-                sidebar.classList.add('open');
-                overlay.style.opacity = '1';
-                overlay.style.visibility = 'visible';
-            }
+            sidebar.classList.toggle('open');
         }
         
         mobileMenuBtns.forEach(btn => {
             btn.addEventListener('click', toggleSidebar);
         });
-        
-        overlay.addEventListener('click', toggleSidebar);
         
         // Auto-resize textarea
         const textarea = document.getElementById('chat-input');
@@ -836,138 +460,11 @@
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
-        
-        // Attach button logic
-        var attachBtn = document.getElementById('attach-btn');
-        var fileInput = document.getElementById('file-input');
-        if (attachBtn && fileInput) {
-            attachBtn.addEventListener('click', function() {
-                fileInput.click();
-            });
-        }
-        
-        // Suggestion click logic
-        var suggestionCards = document.querySelectorAll('.suggestion-card');
-        suggestionCards.forEach(function(card) {
-            card.addEventListener('click', function() {
-                document.getElementById('chat-input').value = card.getAttribute('data-suggestion');
-                document.getElementById('chat-form').requestSubmit();
-            });
-        });
-        
-        // On form submit, fade out landing content if it exists
-        var chatForm = document.getElementById('chat-form');
-        if (chatForm) {
-            chatForm.addEventListener('submit', function(e) {
-                var landing = document.getElementById('landing-content');
-                if (landing && window.getComputedStyle(landing).display !== 'none') {
-                    e.preventDefault();
-                    landing.classList.add('fade-out');
-                    landing.addEventListener('animationend', function() {
-                        chatForm.submit();
-                    }, { once: true });
-                }
-            });
-        }
-        
+
         // Scroll to bottom of chat history
-        var chatHistoryContainer = document.getElementById('chat-history-container');
-        if (chatHistoryContainer) {
-            chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
-        }
-        
-        // Profile dropdown logic
-        var profileAvatar = document.getElementById('profile-avatar');
-        var profileDropdown = document.getElementById('profile-dropdown');
-        if (profileAvatar) {
-            profileAvatar.addEventListener('click', function(event) {
-                event.stopPropagation();
-                profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
-            });
-        }
-        window.addEventListener('click', function(event) {
-            if (profileDropdown && profileDropdown.style.display === 'block') {
-                profileDropdown.style.display = 'none';
-            }
-        });
-        
-        // Enter to submit
-        var chatInput = document.getElementById('chat-input');
-        if (chatInput) {
-            chatInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    document.getElementById('chat-form').requestSubmit();
-                }
-            });
-        }
-        
-        // Touch-friendly interactions
-        let touchStartY = 0;
-        let touchEndY = 0;
-        
-        document.addEventListener('touchstart', function(e) {
-            touchStartY = e.changedTouches[0].screenY;
-        });
-        
-        document.addEventListener('touchend', function(e) {
-            touchEndY = e.changedTouches[0].screenY;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartY - touchEndY;
-            
-            // Swipe up from bottom to focus input
-            if (diff > swipeThreshold && touchStartY > window.innerHeight - 100) {
-                document.getElementById('chat-input').focus();
-            }
-        }
-        
-        // Prevent zoom on double tap
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-        
-        // Handle viewport changes
-        function handleViewportChange() {
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('open');
-                overlay.style.opacity = '0';
-                overlay.style.visibility = 'hidden';
-            }
-        }
-        
-        window.addEventListener('resize', handleViewportChange);
-        
-        // Initialize mobile menu button visibility
-        function updateMobileMenuVisibility() {
-            const isMobile = window.innerWidth <= 768;
-            mobileMenuBtns.forEach(btn => {
-                btn.style.display = isMobile ? 'flex' : 'none';
-            });
-        }
-        
-        updateMobileMenuVisibility();
-        window.addEventListener('resize', updateMobileMenuVisibility);
-        
-        // Service Worker Registration for PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/static/sw.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(function(err) {
-                        console.log('ServiceWorker registration failed');
-                    });
-            });
+        const contentArea = document.querySelector('.content-area');
+        if(contentArea) {
+            contentArea.scrollTop = contentArea.scrollHeight;
         }
     });
     </script>

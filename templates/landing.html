@@ -10,8 +10,16 @@
     <link rel="apple-touch-icon" href="/static/icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-color: #0d0d0d;
+            --surface-color: #1e1f20;
+            --on-surface-color: #e8eaed;
+            --primary-color: #8990f6;
+            --secondary-color: #5f6368;
+        }
+
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -49,10 +57,10 @@
         }
 
         body {
-            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Google Sans', sans-serif;
             margin: 0;
-            background-color: #0d0d0d;
-            color: #e4e4e7;
+            background-color: var(--background-color);
+            color: var(--on-surface-color);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -72,51 +80,40 @@
 
         .title {
             font-size: clamp(2.5rem, 8vw, 4rem);
-            font-weight: 800;
+            font-weight: 700;
             line-height: 1.1;
-            letter-spacing: -0.025em;
             background: linear-gradient(180deg, #fff 70%, #a8a29e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             margin: 0;
-            animation: fadeInUp 0.8s ease-out;
         }
 
         .subtitle {
             font-size: clamp(1rem, 3vw, 1.2rem);
-            color: #a1a1aa;
+            color: var(--secondary-color);
             margin: 1.5rem auto 2.5rem auto;
             max-width: 500px;
             line-height: 1.6;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
         }
 
         .login-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: clamp(12px, 3vw, 16px) clamp(24px, 6vw, 32px);
+            padding: 12px 24px;
             border: none;
             border-radius: 12px;
-            background-image: linear-gradient(to right, #5e62e3, #4a4ed4);
+            background-color: var(--primary-color);
             color: #fff;
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            font-size: 1rem;
             font-weight: 600;
             text-decoration: none;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(94, 98, 227, 0.2);
             transition: all 0.3s ease;
-            animation: fadeInUp 0.8s ease-out 0.4s both;
-            -webkit-tap-highlight-color: transparent;
-            min-height: 48px;
         }
 
-        .login-button:hover,
-        .login-button:active {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(94, 98, 227, 0.3);
-            background-image: linear-gradient(to right, #4a4ed4, #3b3bc7);
+        .login-button:hover {
+            opacity: 0.9;
         }
 
         .login-button img {
@@ -230,7 +227,7 @@
         /* High contrast mode support */
         @media (prefers-contrast: high) {
             .login-button {
-                background-image: linear-gradient(to right, #1d4ed8, #1e40af);
+                background-color: #1d4ed8;
                 border: 2px solid #3b82f6;
             }
         }
