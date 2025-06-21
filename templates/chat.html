@@ -494,9 +494,9 @@
                     <h1>Hello, {{ username }}</h1>
                     <p class="subtitle">How can your <span class="gradient-text">{{ agent.name }}</span> help you today?</p>
                     <div class="suggestion-cards">
-                        <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
-                        <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
-                        <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
+                        {% for suggestion in agent.suggestions %}
+                        <div class="suggestion-card" data-suggestion="{{ suggestion }}">{{ suggestion }}</div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

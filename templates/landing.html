@@ -16,6 +16,7 @@
             --text-primary: #f0f0f0;
             --text-secondary: #a0a0a0;
             --card-bg: rgba(22, 22, 22, 0.5);
+            --logo-gradient: linear-gradient(90deg, #a855f7, #ec4899);
         }
 
         @keyframes move-glow {
@@ -32,8 +33,6 @@
             padding: 0;
             overflow-x: hidden;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .background-glow {
@@ -49,28 +48,34 @@
             filter: blur(100px);
         }
 
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         .container {
             width: 100%;
             max-width: 1100px;
             margin: 0 auto;
             padding: 0 2rem;
             z-index: 1;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
         }
 
-        header {
-            padding: 2rem 0;
+        header .container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
+            background: var(--logo-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .cta-button {
@@ -205,46 +210,52 @@
 </head>
 <body>
     <div class="background-glow"></div>
-
-    <header class="container">
-        <div class="logo">Dreamline</div>
-        {% if session.user %}
-            <a href="{{ url_for('logout') }}" class="cta-button">Logout</a>
-        {% else %}
-            <a href="{{ url_for('login') }}" class="cta-button">Get Started</a>
-        {% endif %}
-    </header>
-
-    <main class="container">
-        <section class="hero">
-            <h1>Meet Your Specialist AI Team</h1>
-            <p>One platform, seven specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
-            {% if not session.user %}
-                <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
-            {% endif %}
-        </section>
-
-        {% if session.user %}
-        <section class="agent-showcase">
-            <h2>Choose Your Agent</h2>
-            <div class="agent-grid">
-                {% for agent_key, agent_info in agents.items() %}
-                <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card">
-                    <div>
-                        <div class="agent-name">{{ agent_info.name }}</div>
-                        <p class="agent-description">{{ agent_info.description }}</p>
-                    </div>
-                    <div class="arrow">→</div>
-                </a>
-                {% endfor %}
+    <div class="page-wrapper">
+        <header>
+            <div class="container">
+                <div class="logo">Dreamline</div>
+                {% if session.user %}
+                    <a href="{{ url_for('logout') }}" class="cta-button">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="cta-button">Get Started</a>
+                {% endif %}
             </div>
-        </section>
-        {% endif %}
-    </main>
+        </header>
 
-    <footer class="container">
-        <p>&copy; 2025 Dreamline. All rights reserved.</p>
-    </footer>
+        <main>
+            <div class="container">
+                <section class="hero">
+                    <h1>Meet Your Specialist AI Team</h1>
+                    <p>One platform, seven specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
+                    {% if not session.user %}
+                        <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
+                    {% endif %}
+                </section>
 
+                {% if session.user %}
+                <section class="agent-showcase">
+                    <h2>Choose Your Agent</h2>
+                    <div class="agent-grid">
+                        {% for agent_key, agent_info in agents.items() %}
+                        <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card">
+                            <div>
+                                <div class="agent-name">{{ agent_info.name }}</div>
+                                <p class="agent-description">{{ agent_info.description }}</p>
+                            </div>
+                            <div class="arrow">→</div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2025 Dreamline. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
 </body>
 </html> 

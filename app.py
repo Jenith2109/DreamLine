@@ -20,36 +20,71 @@ AGENTS = {
         "name": "SuperHuman",
         "prompt": "You are a helpful general-purpose AI assistant. Be friendly, knowledgeable, and ready to help with a wide range of tasks.",
         "description": "Your superhuman partner for everything.",
+        "suggestions": [
+            "Explain quantum computing in simple terms",
+            "Got any creative ideas for a 10 year old's birthday?",
+            "How do I make an HTTP request in Javascript?"
+        ]
     },
     "creative_writer": {
         "name": "Creative Writer",
         "prompt": "You are a master storyteller and creative writer. Your purpose is to help users write poems, stories, marketing copy, and other creative texts. Always adopt a highly imaginative and descriptive tone.",
         "description": "Your partner for stories, poems, and marketing copy.",
+        "suggestions": [
+            "Write a short poem about the moon",
+            "Draft a catchy slogan for a coffee shop",
+            "Help me start a fantasy story"
+        ]
     },
     "code_assistant": {
         "name": "Code Assistant",
         "prompt": "You are an expert programmer and code assistant. Your goal is to help users write, debug, and understand code. Provide clear explanations and always format code snippets correctly in markdown.",
         "description": "The expert for writing, debugging, and explaining code.",
+        "suggestions": [
+            "How to implement a binary search in Python?",
+            "Explain the concept of recursion",
+            "SQL vs. NoSQL: What are the differences?"
+        ]
     },
     "travel_planner": {
         "name": "Travel Planner",
         "prompt": "You are a knowledgeable travel agent. Your job is to create detailed itineraries, suggest destinations, and provide practical travel advice. Always be enthusiastic and helpful.",
         "description": "Plan your next adventure with itineraries and advice.",
+        "suggestions": [
+            "Create a 3-day itinerary for a trip to Paris",
+            "Budget-friendly destinations in Southeast Asia?",
+            "What are some tips for solo traveling in Japan?"
+        ]
     },
     "career_coach": {
         "name": "Career Coach",
         "prompt": "You are a supportive and insightful career coach. You help users with resume writing, interview preparation, and career advice. Be encouraging and provide actionable tips.",
         "description": "Get help with resumes, interview prep, and career advice.",
+        "suggestions": [
+            "Review my resume for a software engineer role",
+            "How should I prepare for a behavioral interview?",
+            "What are some high-demand skills to learn in 2025?"
+        ]
     },
     "chef": {
         "name": "Chef",
         "prompt": "You are a passionate chef and culinary expert. You provide recipes, create meal plans, and offer cooking guidance. Your tone should be warm and your instructions easy to follow.",
         "description": "Discover new recipes, meal plans, and cooking tips.",
+        "suggestions": [
+            "What's an easy recipe for a weeknight dinner?",
+            "How do I make a classic Italian lasagna?",
+            "Suggest a healthy breakfast smoothie recipe"
+        ]
     },
     "fitness_trainer": {
         "name": "Fitness Trainer",
         "prompt": "You are a certified fitness trainer. Your role is to create workout plans, offer fitness advice, and motivate users to reach their health goals. Be energetic and knowledgeable.",
         "description": "Your guide to workout plans and achieving fitness goals.",
+        "suggestions": [
+            "Create a 30-minute HIIT workout for me",
+            "What are some good exercises to strengthen my core?",
+            "How can I improve my running stamina?"
+        ]
     }
 }
 
