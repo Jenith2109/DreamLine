@@ -272,59 +272,62 @@
             }
         }
         .main-content {
+            flex: 1;
             display: flex;
             flex-direction: column;
+            position: relative;
+            padding: 2rem;
+            background-color: #111015;
             height: 100vh;
+            box-sizing: border-box;
         }
-        .chat-scroll-area {
-            flex: 1 1 auto;
-            overflow-y: auto;
-            width: 100%;
+
+        .app-title {
+            position: absolute;
+            top: 2.5rem;
+            left: 2.5rem;
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 500;
         }
-        .chat-history {
+
+        .landing-content {
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            padding: 32px 0 32px 0;
+            align-items: flex-start;
+            justify-content: flex-start;
+            height: 100%;
+            width: 100%;
+            padding-left: 120px;
+            padding-top: 60px;
+            box-sizing: border-box;
+            max-width: 800px;
         }
-        .input-bar {
-            flex-shrink: 0;
+
+        .landing-content h1 {
+            font-size: 3.5rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+            background: -webkit-linear-gradient(45deg, #60a5fa, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
         }
-        .file-card {
+
+        .landing-content .subtitle {
+            font-size: 3.5rem;
+            font-weight: 500;
+            color: #e2e2e6;
+            margin-top: 0;
+            margin-bottom: 2.5rem;
+        }
+
+        .suggestion-cards {
             display: flex;
-            align-items: center;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-            padding: 12px 18px;
-            margin-bottom: 8px;
-            width: fit-content;
-            gap: 12px;
-        }
-        .file-icon {
-            font-size: 2rem;
-            color: #ff4a6b;
-        }
-        .file-name {
-            font-weight: 600;
-        }
-        .file-type {
-            color: #888;
-            font-size: 0.9rem;
-        }
-        .remove-file {
-            background: #000;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            margin-left: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 1.2rem;
+            max-width: 900px;
         }
         .input-bar-container {
             padding: 1rem 2rem 2rem 2rem;
@@ -428,7 +431,7 @@
                 <div class="icon" title="Settings">
                     <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12.0005 15C13.6573 15 15.0005 13.6569 15.0005 12C15.0005 10.3431 13.6573 9 12.0005 9C10.3436 9 9.00049 10.3431 9.00049 12C9.00049 13.6569 10.3436 15 12.0005 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9.28957 19.3711L9.87402 20.6856C10.0478 21.0768 10.3313 21.4093 10.6902 21.6426C11.0492 21.8759 11.4681 22.0001 11.8962 22C12.3244 22.0001 12.7433 21.8759 13.1022 21.6426C13.4612 21.4093 13.7447 21.0768 13.9185 20.6856L14.5029 19.3711C14.711 18.9047 15.0609 18.5159 15.5029 18.26C15.9477 18.0034 16.4622 17.8941 16.9729 17.9478L18.4029 18.1C18.8286 18.145 19.2582 18.0656 19.6396 17.8713C20.021 17.6771 20.3379 17.3763 20.5518 17.0056C20.766 16.635 20.868 16.2103 20.8455 15.7829C20.823 15.3555 20.677 14.9438 20.4251 14.5978L19.5785 13.4344C19.277 13.0171 19.1159 12.5148 19.1185 12C19.1184 11.4866 19.281 10.9864 19.5829 10.5711L20.4296 9.40778C20.6814 9.06175 20.8275 8.65007 20.85 8.22267C20.8725 7.79528 20.7704 7.37054 20.5562 7C20.3423 6.62923 20.0255 6.32849 19.644 6.13423C19.2626 5.93997 18.833 5.86053 18.4074 5.90556L16.9774 6.05778C16.4667 6.11141 15.9521 6.00212 15.5074 5.74556C15.0645 5.48825 14.7144 5.09736 14.5074 4.62889L13.9185 3.31444C13.7447 2.92317 13.4612 2.59072 13.1022 2.3574C12.7433 2.12408 12.3244 1.99993 11.8962 2C11.4681 1.99993 11.0492 2.12408 10.6902 2.3574C10.3313 2.59072 10.0478 2.92317 9.87402 3.31444L9.28957 4.62889C9.0825 5.09736 8.73245 5.48825 8.28957 5.74556C7.84479 6.00212 7.33024 6.11141 6.81957 6.05778L5.38513 5.90556C4.95946 5.86053 4.52987 5.93997 4.14844 6.13423C3.76702 6.32849 3.45014 6.62923 3.23624 7C3.02206 7.37054 2.92002 7.79528 2.94251 8.22267C2.96499 8.65007 3.11103 9.06175 3.36291 9.40778L4.20957 10.5711C4.51151 10.9864 4.67411 11.4866 4.67402 12C4.67411 12.5134 4.51151 13.0137 4.20957 13.4289L3.36291 14.5922C3.11103 14.9382 2.96499 15.3499 2.94251 15.7773C2.92002 16.2047 3.02206 16.6295 3.23624 17C3.45036 17.3706 3.76727 17.6712 4.14864 17.8654C4.53001 18.0596 4.95949 18.1392 5.38513 18.0944L6.81513 17.9422C7.3258 17.8886 7.84034 17.9979 8.28513 18.2544C8.72966 18.511 9.08134 18.902 9.28957 19.3711Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.28957 19.3711L9.87402 20.6856C10.0478 21.0768 10.3313 21.4093 10.6902 21.6426C11.0492 21.8759 11.4681 22.0001 11.8962 22C12.3244 22.0001 12.7433 21.8759 13.1022 21.6426C13.4612 21.4093 13.7447 21.0768 13.9185 20.6856L14.5029 19.3711C14.711 18.9047 15.0609 18.5159 15.5029 18.26C15.9477 18.0034 16.4622 17.8941 16.9729 17.9478L18.4029 18.1C18.8286 18.145 19.2582 18.0656 19.6396 17.8713C20.021 17.6771 20.3379 17.3763 20.5518 17.0056C20.766 16.635 20.868 16.2103 20.8455 15.7829C20.823 15.3555 20.677 14.9438 20.4251 14.5978L19.5785 13.4344C19.277 13.0171 19.1159 12.5148 19.1185 12C19.1184 11.4866 19.281 10.9864 19.5829 10.5711L20.4296 9.40778C20.6814 9.06175 20.8275 8.65007 20.85 8.22267C20.8725 7.79528 20.7704 7.37054 20.5562 7C20.3423 6.62923 20.0255 6.32849 19.644 6.13423C19.2626 5.93997 18.833 5.86053 18.4074 5.90556L16.9774 6.05778C16.4667 6.11141 15.9521 6.00212 15.5074 5.74556C15.0645 5.48825 14.7144 5.09736 14.5074 4.62889L13.9185 3.31444C13.7447 2.92317 13.4612 2.59072 13.1022 2.3574C12.7433 2.12408 12.3244 1.99993 11.8962 2C11.4681 1.99993 11.0492 2.12408 10.6902 2.3574C10.3313 2.59072 10.0478 2.92317 9.87402 3.31444L9.28957 4.62889C9.0825 5.09736 8.73245 5.48825 8.28957 5.74556C7.84479 6.00212 7.33024 6.11141 6.81957 6.05778L5.38513 5.90556C4.95946 5.86053 4.52987 5.93997 4.14844 6.13423C3.76702 6.32849 3.45014 6.62923 3.23624 7C3.02206 7.37054 2.92002 7.79528 2.94251 8.22267C2.96499 8.65007 2.96499 9.06175 3.36291 9.40778L4.20957 10.5711C4.51151 10.9864 4.67411 11.4866 4.67402 12C4.67411 12.5134 4.51151 13.0137 4.20957 13.4289L3.36291 14.5922C3.11103 14.9382 2.96499 15.3499 2.94251 15.7773C2.92002 16.2047 3.02206 16.6295 3.23624 17C3.45036 17.3706 3.76727 17.6712 4.14864 17.8654C4.53001 18.0596 4.95949 18.1392 5.38513 18.0944L6.81513 17.9422C7.3258 17.8886 7.84034 17.9979 8.28513 18.2544C8.72966 18.511 9.08134 18.902 9.28957 19.3711Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
             </div>
@@ -442,12 +445,12 @@
                     <a href="/logout">Logout</a>
                 </div>
             </div>
+            <h1 class="gradient-text app-title">Dreamline</h1>
             {% if not memory or memory|length == 0 %}
-            <div class="center-content" id="landing-content">
-                <div class="app-title" style="font-size:3.2rem;font-weight:800;background:linear-gradient(90deg,#6366f1 0%,#ef4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-fill-color:transparent;letter-spacing:1px;margin-bottom:0.5rem;font-family:'Inter',sans-serif;">Dreamline</div>
-                <div class="greeting" id="greeting">Hello, <span style="color:#ef4444;">{{ session['user']['given_name'] }}</span></div>
-                <div class="subheading" id="subheading">How can I help you today?</div>
-                <div class="suggestions" id="suggestions">
+            <div id="landing-content" class="landing-content">
+                <h1>Hello, {{ username }}</h1>
+                <p class="subtitle">How can I help you today?</p>
+                <div class="suggestion-cards">
                     <div class="suggestion-card" data-suggestion="Explain quantum computing in simple terms">Explain quantum computing in simple terms</div>
                     <div class="suggestion-card" data-suggestion="Got any creative ideas for a 10 year old's birthday?">Got any creative ideas for a 10 year old's birthday?</div>
                     <div class="suggestion-card" data-suggestion="How do I make an HTTP request in Javascript?">How do I make an HTTP request in Javascript?</div>
@@ -558,6 +561,17 @@
                 profileDropdown.style.display = 'none';
             }
         });
+
+        // Enter to submit
+        var chatInput = document.getElementById('chat-input');
+        if (chatInput) {
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    document.getElementById('chat-form').submit();
+                }
+            });
+        }
     });
     </script>
 </body>
