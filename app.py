@@ -251,6 +251,51 @@ def custom_agent():
     
     return render_template("custom_agent.html", agent_name=agent_name, agent_prompt=agent_prompt)
 
+@app.route("/edit-custom-agent", methods=["GET", "POST"])
+def edit_custom_agent():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    user_id = get_or_create_user(session["user"].get("name", "User"))
+    conn = sqlite3.connect('dip_users.db')
+    c = conn.cursor()
+
+    if request.method == "POST":
+        agent_name = request.form.get("agent_name", "Custom Agent")
+        agent_prompt = request.form.get("agent_prompt", "")
+        c.execute("UPDATE users SET custom_agent_name = ?, custom_prompt = ? WHERE id = ?", (agent_name, agent_prompt, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))
+
+    c.execute("SELECT custom_agent_name, custom_prompt FROM users WHERE id = ?", (user_id,))
+    custom_agent_data = c.fetchone()
+    conn.close()
+    
+    if not custom_agent_data or not custom_agent_data[0] or not custom_agent_data[1]:
+        return redirect(url_for('custom_agent'))
+    
+    agent_name = custom_agent_data[0]
+    agent_prompt = custom_agent_data[1]
+    
+    return render_template("edit_custom_agent.html", agent_name=agent_name, agent_prompt=agent_prompt)
+
+@app.route("/remove-custom-agent", methods=["POST"])
+def remove_custom_agent():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    user_id = get_or_create_user(session["user"].get("name", "User"))
+    conn = sqlite3.connect('dip_users.db')
+    c = conn.cursor()
+    
+    # Clear the custom agent data
+    c.execute("UPDATE users SET custom_agent_name = NULL, custom_prompt = NULL WHERE id = ?", (user_id,))
+    conn.commit()
+    conn.close()
+    
+    return redirect(url_for('index'))
+
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
     if "user" not in session:

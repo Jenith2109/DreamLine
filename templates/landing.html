@@ -320,6 +320,59 @@
             box-shadow: 0 0 30px rgba(34, 211, 238, 0.2);
         }
 
+        .agent-card-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        .agent-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .chat-btn {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.2s ease;
+        }
+
+        .chat-btn:hover {
+            color: rgba(34, 211, 238, 0.8);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .edit-btn, .delete-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-btn:hover {
+            background-color: rgba(34, 211, 238, 0.1);
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(220, 38, 38, 0.1);
+        }
+
         @keyframes gradient-glow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -335,21 +388,21 @@
         .agent-card.premium-card::before {
             content: '';
             position: absolute;
-            top: -2px; 
-            left: -2px;
+            top: -1px; 
+            left: -1px;
             z-index: -1;
-            width: calc(100% + 4px);
-            height: calc(100% + 4px);
-            background: linear-gradient(60deg, #22d3ee, #a855f7, #ec4899, #22d3ee);
-            background-size: 300% 300%;
-            border-radius: 18px;
-            animation: gradient-glow 4s linear infinite;
+            width: calc(100% + 2px);
+            height: calc(100% + 2px);
+            background: linear-gradient(60deg, rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.3), rgba(236, 72, 153, 0.3), rgba(34, 211, 238, 0.3));
+            background-size: 400% 400%;
+            border-radius: 17px;
+            animation: gradient-glow 6s ease-in-out infinite;
         }
 
         .agent-card.premium-card:hover {
             transform: translateY(-8px);
             border-color: transparent;
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
         }
 
         .agent-card:hover {
@@ -550,13 +603,23 @@
                                     <div class="arrow">→</div>
                                 </a>
                             {% elif agent_key == 'user_custom' %}
-                                <a href="{{ url_for('set_agent', agent_name='custom') }}" class="agent-card scroll-animate user-custom-card">
-                                    <div>
-                                        <div class="agent-name">✨ {{ agent_info.name }}</div>
-                                        <p class="agent-description">{{ agent_info.description }}</p>
+                                <div class="agent-card scroll-animate user-custom-card">
+                                    <div class="agent-card-content">
+                                        <div>
+                                            <div class="agent-name">✨ {{ agent_info.name }}</div>
+                                            <p class="agent-description">{{ agent_info.description }}</p>
+                                        </div>
+                                        <div class="agent-actions">
+                                            <a href="{{ url_for('set_agent', agent_name='custom') }}" class="chat-btn">Chat →</a>
+                                            <div class="action-buttons">
+                                                <a href="{{ url_for('edit_custom_agent') }}" class="edit-btn" title="Edit Agent">✏️</a>
+                                                <form method="POST" action="{{ url_for('remove_custom_agent') }}" style="display: inline;">
+                                                    <button type="submit" class="delete-btn" title="Delete Agent" onclick="return confirm('Are you sure you want to delete your custom agent?')">🗑️</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="arrow">→</div>
-                                </a>
+                                </div>
                             {% elif agent_key == 'adaptive_agent' %}
                                 <a href="{{ url_for('set_agent', agent_name=agent_key) }}" class="agent-card scroll-animate premium-card">
                                     <div>

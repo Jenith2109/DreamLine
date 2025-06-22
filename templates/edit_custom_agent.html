@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dreamline - Edit Your Agent</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --primary-glow: radial-gradient(circle at 25% 35%, #6366f1 0%, transparent 40%), radial-gradient(circle at 75% 65%, #a855f7 0%, transparent 40%);
+            --secondary-glow: radial-gradient(circle at 80% 20%, #ec4899 0%, transparent 35%);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --card-bg: rgba(22, 22, 22, 0.5);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --button-bg: #a855f7;
+            --button-hover-bg: #9333ea;
+            --danger-bg: #dc2626;
+            --danger-hover-bg: #b91c1c;
+        }
+
+        @keyframes move-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--bg) var(--primary-glow), var(--secondary-glow);
+            background-size: 300% 300%;
+            animation: move-glow 30s ease-in-out infinite;
+            filter: blur(100px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            z-index: 1;
+        }
+        
+        .creator-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            opacity: 0;
+            animation: fade-in-up 0.8s 0.2s ease-out forwards;
+        }
+        
+        .form-content h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(90deg, #d8b4fe, #a855f7, #f0abfc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-content p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin: 0 auto 2.5rem auto;
+            line-height: 1.6;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.4);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            flex-grow: 1;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--button-bg);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-align: center;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .danger-btn {
+            background-color: var(--danger-bg);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .danger-btn:hover {
+            background-color: var(--danger-hover-bg);
+        }
+        
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Preview Card Styles */
+        .preview-pane {
+            perspective: 1500px;
+        }
+        
+        .agent-card-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-bright);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease;
+            height: 250px;
+            justify-content: space-between;
+        }
+        
+        .agent-name-preview {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .agent-description-preview {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .arrow-preview {
+            align-self: flex-end;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 900px) {
+            .creator-grid {
+                grid-template-columns: 1fr;
+            }
+            .preview-pane {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-glow"></div>
+    <div class="container">
+        <div class="creator-grid">
+            <div class="form-content">
+                <h1>Edit Your Agent</h1>
+                <p>Modify your custom AI agent's name and personality. Changes will be applied immediately.</p>
+                
+                <form method="POST" action="{{ url_for('edit_custom_agent') }}">
+                    <div class="form-group">
+                        <label for="agent_name">Agent Name</label>
+                        <input type="text" id="agent_name" name="agent_name" class="form-input" value="{{ agent_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="agent_prompt">Agent Prompt & Personality</label>
+                        <textarea id="agent_prompt" name="agent_prompt" class="form-textarea">{{ agent_prompt }}</textarea>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="submit-btn">Save Changes</button>
+                        <a href="{{ url_for('index') }}" class="back-link">Cancel</a>
+                    </div>
+                </form>
+
+                <form method="POST" action="{{ url_for('remove_custom_agent') }}" style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Danger Zone</p>
+                    <button type="submit" class="danger-btn" onclick="return confirm('Are you sure you want to delete your custom agent? This action cannot be undone.')">Delete Custom Agent</button>
+                </form>
+            </div>
+            <div class="preview-pane">
+                <div class="agent-card-preview">
+                    <div>
+                        <div id="agent-name-preview" class="agent-name-preview">{{ agent_name }}</div>
+                        <p class="agent-description-preview">This is how your agent will appear after saving changes.</p>
+                    </div>
+                    <div class="arrow-preview">→</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const agentNameInput = document.getElementById('agent_name');
+            const agentNamePreview = document.getElementById('agent-name-preview');
+
+            function updatePreview() {
+                const name = agentNameInput.value.trim();
+                agentNamePreview.textContent = name ? name : 'Your Agent Name';
+            }
+
+            agentNameInput.addEventListener('input', updatePreview);
+        });
+    </script>
+</body>
+</html> 
