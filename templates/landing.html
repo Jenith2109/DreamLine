@@ -249,15 +249,17 @@
         }
 
         .agent-showcase {
-            padding: 6rem 0;
+            padding: 4rem 0;
         }
         
         .agent-showcase h2 {
             text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            color: var(--text-secondary);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+            background: linear-gradient(90deg, #d8b4fe, #a855f7, #f0abfc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .agent-grid {
@@ -353,9 +355,8 @@
         .edit-btn, .delete-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 1rem;
             cursor: pointer;
-            padding: 0.6rem;
+            padding: 0;
             border-radius: 8px;
             transition: all 0.2s ease;
             text-decoration: none;
@@ -363,8 +364,8 @@
             align-items: center;
             justify-content: center;
             color: var(--text-secondary);
-            min-width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
         }
 
         .edit-btn:hover {
@@ -605,7 +606,7 @@
                             {% if agent_key == 'custom' %}
                                 <a href="{{ url_for('custom_agent') }}" class="agent-card scroll-animate custom-card">
                                     <div>
-                                        <div class="agent-name">+ {{ agent_info.name }}</div>
+                                        <div class="agent-name">{{ agent_info.name }}</div>
                                         <p class="agent-description">{{ agent_info.description }}</p>
                                     </div>
                                     <div class="arrow">→</div>
@@ -614,7 +615,7 @@
                                 <div class="agent-card scroll-animate premium-card">
                                     <div class="agent-card-content">
                                         <div>
-                                            <div class="agent-name">✨ {{ agent_info.name }}</div>
+                                            <div class="agent-name">{{ agent_info.name }}</div>
                                             <p class="agent-description">{{ agent_info.description }}</p>
                                         </div>
                                         <div class="agent-actions">
