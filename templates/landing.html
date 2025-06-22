@@ -348,29 +348,38 @@
 
         .action-buttons {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
         .edit-btn, .delete-btn {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
             cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
+            padding: 0.6rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--text-secondary);
+            min-width: 36px;
+            height: 36px;
         }
 
         .edit-btn:hover {
             background-color: rgba(34, 211, 238, 0.1);
+            border-color: rgba(34, 211, 238, 0.3);
+            color: rgba(34, 211, 238, 0.8);
+            transform: translateY(-1px);
         }
 
         .delete-btn:hover {
             background-color: rgba(220, 38, 38, 0.1);
+            border-color: rgba(220, 38, 38, 0.3);
+            color: rgba(220, 38, 38, 0.8);
+            transform: translateY(-1px);
         }
 
         @keyframes gradient-glow {
@@ -612,9 +621,22 @@
                                         <div class="agent-actions">
                                             <a href="{{ url_for('set_agent', agent_name='custom') }}" class="chat-btn">Chat →</a>
                                             <div class="action-buttons">
-                                                <a href="{{ url_for('edit_custom_agent') }}" class="edit-btn" title="Edit Agent">✏️</a>
+                                                <a href="{{ url_for('edit_custom_agent') }}" class="edit-btn" title="Edit Agent">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                        <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                    </svg>
+                                                </a>
                                                 <form method="POST" action="{{ url_for('remove_custom_agent') }}" style="display: inline;">
-                                                    <button type="submit" class="delete-btn" title="Delete Agent" onclick="return confirm('Are you sure you want to delete your custom agent?')">🗑️</button>
+                                                    <button type="submit" class="delete-btn" title="Delete Agent" onclick="return confirm('Are you sure you want to delete your custom agent?')">
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="M3 6h18"></path>
+                                                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                            <line x1="10" x2="10" y1="11" y2="17"></line>
+                                                            <line x1="14" x2="14" y1="11" y2="17"></line>
+                                                        </svg>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>
