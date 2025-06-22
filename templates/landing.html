@@ -309,26 +309,14 @@
         .agent-card-6::before { background-image: radial-gradient(circle at bottom, rgba(251, 146, 60, 0.08), transparent 40%); }
         .agent-card-7::before { background-image: radial-gradient(circle at left, rgba(168, 85, 247, 0.1), transparent 40%); }
 
-        .agent-card.custom-card {
-            border-style: dashed;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        
         .agent-card.custom-card:hover {
             border-color: var(--button-bg);
             background-color: rgba(168, 85, 247, 0.1);
         }
 
-        .agent-card.user-custom-card {
-            border-style: solid;
-            border-color: rgba(34, 211, 238, 0.5);
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.05), rgba(168, 85, 247, 0.05));
-        }
-        
-        .agent-card.user-custom-card:hover {
-            border-color: rgba(34, 211, 238, 0.8);
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(168, 85, 247, 0.1));
-            box-shadow: 0 0 30px rgba(34, 211, 238, 0.2);
+        .agent-card.custom-card {
+            border-style: dashed;
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .agent-card-content {
@@ -589,7 +577,7 @@
                 <section class="hero">
                     <div class="hero-content scroll-animate">
                         <h1>Meet Your Specialist AI Agents</h1>
-                        <p>One platform, seven specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
+                        <p>One platform, five specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
                         {% if not session.user %}
                             <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
                         {% endif %}
@@ -623,7 +611,7 @@
                                     <div class="arrow">→</div>
                                 </a>
                             {% elif agent_key == 'user_custom' %}
-                                <div class="agent-card scroll-animate user-custom-card">
+                                <div class="agent-card scroll-animate premium-card">
                                     <div class="agent-card-content">
                                         <div>
                                             <div class="agent-name">✨ {{ agent_info.name }}</div>
