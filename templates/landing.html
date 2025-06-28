@@ -301,27 +301,61 @@
         }
 
         .image-showcase-wrapper {
-            margin-top: 6rem;
-            perspective: 1000px;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+            perspective: 1600px;
         }
 
-        .image-showcase {
-            margin: 2rem auto;
-            max-width: 600px;
-            width: 100%;
-            padding: 1.5rem;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: rotateX(15deg) rotateY(0deg);
-            transition: all 0.5s ease;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            animation: float 6s ease-in-out infinite;
+        .dropdown-glass {
+            position: relative;
+            background: rgba(30, 30, 40, 0.7);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), 0 40px 80px 0 rgba(0,0,0,0.5);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid rgba(168, 85, 247, 0.25);
+            overflow: visible;
+            margin-bottom: 40px;
+            transition: box-shadow 0.3s, transform 0.3s;
+            animation: floatUp 2.5s cubic-bezier(.25,.46,.45,.94) infinite alternate;
+            will-change: transform;
         }
 
-        .image-showcase:hover {
-            transform: rotateX(10deg) rotateY(5deg) scale(1.02);
+        .dropdown-glass:first-child {
+            transform: rotateY(-18deg) rotateZ(-2deg) scale(0.98);
+            animation-delay: 0s;
+        }
+        .dropdown-glass:last-child {
+            transform: rotateY(18deg) rotateZ(2deg) scale(0.98);
+            animation-delay: 1.25s;
+        }
+
+        .dropdown-glass img {
+            display: block;
+            width: 600px;
+            max-width: 90vw;
+            border-radius: 1.5rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+        }
+
+        .dropdown-fade {
+            position: absolute;
+            left: 0; right: 0; bottom: -60px;
+            height: 80px;
+            background: linear-gradient(180deg, rgba(30,30,40,0.2) 0%, rgba(30,30,40,0.0) 100%);
+            filter: blur(8px);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.98); }
+            100% { transform: translateY(-18px) scale(1.01); }
         }
 
         .browser-header {
@@ -611,21 +645,24 @@
             font-size: 0.9rem;
         }
         
-        @media (max-width: 768px) {
-            nav { display: none; }
-            .hero { padding: 4rem 0; }
-            .agent-showcase { padding: 2rem 0 4rem 0; }
-            .cursor-glow { display: none; }
-            .image-showcase { transform: rotateX(0) rotateY(0); }
-            .footer-content {
+        @media (max-width: 900px) {
+            .image-showcase-wrapper {
                 flex-direction: column;
-            }
-            .hero-buttons {
-                flex-direction: column;
+                gap: 1.5rem;
                 align-items: center;
+                perspective: 900px;
             }
-            .agent-grid {
-                grid-template-columns: 1fr;
+            .dropdown-glass,
+            .dropdown-glass:first-child,
+            .dropdown-glass:last-child {
+                transform: none !important;
+                width: 100vw;
+                max-width: 98vw;
+                margin-bottom: 24px;
+            }
+            .dropdown-glass img {
+                width: 100vw;
+                max-width: 98vw;
             }
         }
         
@@ -673,15 +710,13 @@
                         </div>
                     </div>
                     <div id="showcase" class="image-showcase-wrapper scroll-animate">
-                        <div class="image-showcase">
-                            <div class="browser-header">
-                                <div class="browser-dot red"></div>
-                                <div class="browser-dot yellow"></div>
-                                <div class="browser-dot green"></div>
-                            </div>
-                            <div class="browser-content">
-                                <img src="{{ url_for('static', filename='chatbot_screenshot copy.png') }}" alt="Chatbot Screenshot">
-                            </div>
+                        <div class="dropdown-glass">
+                            <img src="{{ url_for('static', filename='chatbot_screenshot copy.png') }}" alt="Chatbot Screenshot">
+                            <div class="dropdown-fade"></div>
+                        </div>
+                        <div class="dropdown-glass">
+                            <img src="{{ url_for('static', filename='custom_agent_screenshot.png') }}" alt="Custom Agent Screenshot">
+                            <div class="dropdown-fade"></div>
                         </div>
                     </div>
                 </section>
