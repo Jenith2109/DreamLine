@@ -210,17 +210,20 @@
         }
 
         .image-showcase {
-            border-radius: 12px;
+            border-radius: 18px;
             background: linear-gradient(to bottom, #1e1e1e, #141414);
             padding: 1rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 60px 0 rgba(168,85,247,0.08);
             border: 1px solid var(--border-color);
-            transform: rotateX(15deg) rotateY(0deg);
-            transition: transform 0.5s ease;
+            transform: rotateX(15deg) rotateY(-18deg) scale(1.04);
+            transition: transform 0.7s cubic-bezier(.23,1.01,.32,1), box-shadow 0.4s;
+            will-change: transform;
+            perspective: 1200px;
+            position: relative;
+            z-index: 2;
         }
-
-        .image-showcase:hover {
-            transform: rotateX(0deg) rotateY(0deg) scale(1.02);
+        .image-showcase.in-motion {
+            box-shadow: 0 30px 80px rgba(168,85,247,0.18), 0 0 80px 0 rgba(99,102,241,0.10);
         }
 
         .browser-header {
@@ -263,25 +266,32 @@
         }
 
         .agent-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+            width: 100%;
+            margin: 0 auto;
+            max-width: 480px;
         }
 
         .agent-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            text-decoration: none;
-            color: var(--text-bright);
+            background: rgba(30, 30, 40, 0.7);
+            border: 1.5px solid rgba(168, 85, 247, 0.25);
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            transition: transform 0.5s cubic-bezier(.23,1.01,.32,1), box-shadow 0.3s;
+            will-change: transform;
+            animation: floatCard 4s ease-in-out infinite alternate;
+            padding: 2.2rem 2rem 2rem 2rem;
             display: flex;
             flex-direction: column;
             text-align: left;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, opacity 0.6s ease-out;
-            opacity: 0;
+            height: 220px;
+            justify-content: space-between;
+            opacity: 1;
             position: relative;
             overflow: hidden;
         }
@@ -535,20 +545,19 @@
             font-size: 0.9rem;
         }
 
-        @media (max-width: 768px) {
-            nav { display: none; }
-            .hero { padding: 4rem 0; }
-            .agent-showcase { padding: 2rem 0 4rem 0; }
-            .cursor-glow { display: none; }
-            .image-showcase { transform: rotateX(0) rotateY(0); }
-            .footer-content {
-                flex-direction: column;
-            }
+        @keyframes floatCard {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-16px) scale(1.03); }
         }
-        
-        @media (max-width: 480px) {
-             .footer-content {
-                flex-direction: column;
+
+        @media (max-width: 600px) {
+            .agent-grid {
+                max-width: 98vw;
+                padding: 1.2rem;
+            }
+            .agent-card {
+                padding: 1.2rem;
+                height: 180px;
             }
         }
 
@@ -759,18 +768,24 @@
                 observer.observe(element);
             });
             
-            // 3D Showcase Effect
+            // 3D Showcase Effect (Linear.app style)
             const showcase = document.querySelector('.image-showcase');
             if (showcase) {
+                let timeout;
                 document.body.addEventListener('mousemove', e => {
                     const { clientX, clientY } = e;
                     const { innerWidth, innerHeight } = window;
-                    const x = (clientX - innerWidth / 2) / innerWidth;
-                    const y = (clientY - innerHeight / 2) / innerHeight;
-                    
-                    if(showcase.classList.contains('in-view')) {
-                       showcase.style.transform = `rotateX(${y * -30}deg) rotateY(${x * 30}deg) scale(1.02)`;
-                    }
+                    const x = (clientX - innerWidth / 2) / (innerWidth / 2);
+                    const y = (clientY - innerHeight / 2) / (innerHeight / 2);
+
+                    showcase.classList.add('in-motion');
+                    showcase.style.transform = `rotateX(${15 - y * 12}deg) rotateY(${-18 + x * 24}deg) scale(1.04)`;
+
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        showcase.classList.remove('in-motion');
+                        showcase.style.transform = 'rotateX(15deg) rotateY(-18deg) scale(1.04)';
+                    }, 1200);
                 });
             }
         });
