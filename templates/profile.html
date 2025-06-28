@@ -8,6 +8,30 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #000000;
+            --primary-glow: radial-gradient(circle at 25% 35%, #6366f1 0%, transparent 40%), radial-gradient(circle at 75% 65%, #a855f7 0%, transparent 40%);
+            --secondary-glow: radial-gradient(circle at 80% 20%, #ec4899 0%, transparent 35%);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --card-bg: rgba(22, 22, 22, 0.5);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --button-bg: #a855f7;
+            --button-hover-bg: #9333ea;
+        }
+
+        @keyframes move-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         body {
             font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
             background: #0d0d0d;
@@ -19,6 +43,7 @@
             align-items: center;
             justify-content: center;
         }
+
         .background-glow {
             position: fixed;
             top: 0;
@@ -31,11 +56,50 @@
             animation: move-glow 30s ease-in-out infinite;
             filter: blur(100px);
         }
-        @keyframes move-glow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            z-index: 100;
+            background: rgba(22, 22, 22, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-nav {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-nav:hover {
+            color: var(--text-primary);
+        }
+
+        .container {
+            padding-top: 90px;
+            padding-bottom: 90px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
         .profile-card {
             background: rgba(30, 30, 40, 0.7);
             border-radius: 2rem;
@@ -44,13 +108,16 @@
             -webkit-backdrop-filter: blur(18px);
             border: 1.5px solid rgba(168, 85, 247, 0.25);
             padding: 2.5rem 2rem 2rem 2rem;
-            max-width: 400px;
+            max-width: 500px;
             width: 100%;
             margin: 2rem auto;
             display: flex;
             flex-direction: column;
             align-items: center;
+            opacity: 0;
+            animation: fade-in-up 0.8s ease-out forwards;
         }
+
         .profile-avatar {
             width: 90px;
             height: 90px;
@@ -59,23 +126,62 @@
             margin-bottom: 1.2rem;
             border: 2.5px solid #a855f7;
             box-shadow: 0 0 16px 0 rgba(168,85,247,0.18);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+
         .profile-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
         }
+
         .profile-name {
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 0.2rem;
         }
+
         .profile-email {
             font-size: 1rem;
             color: #a0a0a0;
             margin-bottom: 1.5rem;
         }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #a855f7;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+        }
+
         .profile-options {
             width: 100%;
             display: flex;
@@ -83,6 +189,7 @@
             gap: 1rem;
             margin-top: 1.5rem;
         }
+
         .profile-option {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(168, 85, 247, 0.15);
@@ -93,46 +200,229 @@
             font-weight: 500;
             text-align: left;
             cursor: pointer;
-            transition: background 0.2s, border 0.2s;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
         }
+
         .profile-option:hover {
             background: rgba(168, 85, 247, 0.10);
             border: 1.5px solid #a855f7;
+            transform: translateX(5px);
         }
-        .logout-btn {
+
+        .option-icon {
+            font-size: 1.2rem;
+            color: #a855f7;
+        }
+
+        .settings-section {
+            width: 100%;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #a855f7;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .setting-label {
+            font-size: 0.95rem;
+            color: #f0f0f0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
             background: #a855f7;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(26px);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #a855f7, #9333ea);
             color: #fff;
             border: none;
             border-radius: 1rem;
-            padding: 1rem 1.5rem;
+            padding: 1rem 2rem;
             font-size: 1.05rem;
             font-weight: 700;
             margin-top: 2rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
+            width: 100%;
         }
+
         .logout-btn:hover {
-            background: #9333ea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+            .profile-card {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="background-glow"></div>
-    <div class="profile-card">
-        <div class="profile-avatar">
-            <img src="{{ user['picture'] }}" alt="User Avatar">
+    <header class="header">
+        <div class="logo">Dreamline</div>
+        <a href="{{ url_for('chat') }}" class="back-nav">← Back to Chat</a>
+    </header>
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-avatar" onclick="changeAvatar()">
+                <img src="{{ user['picture'] }}" alt="User Avatar">
+            </div>
+            <div class="profile-name">{{ user['name'] }}</div>
+            <div class="profile-email">{{ user['email'] }}</div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Chats</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Agents</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">7d</div>
+                    <div class="stat-label">Active</div>
+                </div>
+            </div>
+
+            <div class="profile-options">
+                <a href="#" class="profile-option" onclick="editProfile()">
+                    <span>Edit Profile</span>
+                    <span class="option-icon">✏️</span>
+                </a>
+                <a href="#" class="profile-option" onclick="customizeAgent()">
+                    <span>Customize Agent</span>
+                    <span class="option-icon">🤖</span>
+                </a>
+                <a href="#" class="profile-option" onclick="viewHistory()">
+                    <span>Chat History</span>
+                    <span class="option-icon">📚</span>
+                </a>
+                <a href="#" class="profile-option" onclick="exportData()">
+                    <span>Export Data</span>
+                    <span class="option-icon">📤</span>
+                </a>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-title">Settings</div>
+                <div class="setting-item">
+                    <span class="setting-label">Dark Mode</span>
+                    <div class="toggle-switch active" onclick="toggleSetting(this, 'darkMode')"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Notifications</span>
+                    <div class="toggle-switch" onclick="toggleSetting(this, 'notifications')"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Auto-save Chats</span>
+                    <div class="toggle-switch active" onclick="toggleSetting(this, 'autoSave')"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Voice Commands</span>
+                    <div class="toggle-switch" onclick="toggleSetting(this, 'voiceCommands')"></div>
+                </div>
+            </div>
+
+            <form method="GET" action="{{ url_for('logout') }}">
+                <button class="logout-btn" type="submit">Logout</button>
+            </form>
         </div>
-        <div class="profile-name">{{ user['name'] }}</div>
-        <div class="profile-email">{{ user['email'] }}</div>
-        <div class="profile-options">
-            <div class="profile-option">Edit Profile (coming soon)</div>
-            <div class="profile-option">Change Password (coming soon)</div>
-            <div class="profile-option">View Activity (coming soon)</div>
-            <div class="profile-option">Delete Account (coming soon)</div>
-        </div>
-        <form method="GET" action="{{ url_for('logout') }}">
-            <button class="logout-btn" type="submit">Logout</button>
-        </form>
     </div>
+
+    <script>
+        function toggleSetting(element, setting) {
+            element.classList.toggle('active');
+            // Here you would typically save the setting to localStorage or send to server
+            localStorage.setItem(setting, element.classList.contains('active'));
+        }
+
+        function changeAvatar() {
+            // Placeholder for avatar change functionality
+            alert('Avatar change feature coming soon!');
+        }
+
+        function editProfile() {
+            // Placeholder for profile editing
+            alert('Profile editing feature coming soon!');
+        }
+
+        function customizeAgent() {
+            window.location.href = "{{ url_for('edit_custom_agent') }}";
+        }
+
+        function viewHistory() {
+            // Placeholder for chat history
+            alert('Chat history feature coming soon!');
+        }
+
+        function exportData() {
+            // Placeholder for data export
+            alert('Data export feature coming soon!');
+        }
+
+        // Load saved settings on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const settings = ['darkMode', 'notifications', 'autoSave', 'voiceCommands'];
+            settings.forEach(setting => {
+                const saved = localStorage.getItem(setting);
+                const element = document.querySelector(`[onclick*="${setting}"]`);
+                if (saved === 'true' && element) {
+                    element.classList.add('active');
+                } else if (saved === 'false' && element) {
+                    element.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html> 

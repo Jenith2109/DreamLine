@@ -29,6 +29,21 @@
             100% { background-position: 0% 50%; }
         }
 
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
@@ -79,6 +94,17 @@
             z-index: 1;
         }
 
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         header .container {
             padding-top: 1.5rem;
             padding-bottom: 1.5rem;
@@ -110,6 +136,7 @@
         nav {
             display: flex;
             gap: 2.5rem;
+            align-items: center;
         }
 
         nav a {
@@ -149,17 +176,18 @@
             font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-primary);
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            border: none;
             border-radius: 999px;
             text-decoration: none;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
         }
         
         .cta-button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
         }
 
         main {
@@ -167,11 +195,27 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            padding-top: 100px;
         }
 
         .hero {
             text-align: center;
             padding: 4rem 0;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse-glow 4s ease-in-out infinite;
+            z-index: -1;
         }
 
         .scroll-animate {
@@ -187,46 +231,104 @@
         
         .hero h1 {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 800;
-            line-height: 1.2;
+            line-height: 1.1;
             margin: 0 auto 1.5rem auto;
-            max-width: 800px;
-            background: linear-gradient(90deg, #d8b4fe, #a855f7, #f0abfc);
+            max-width: 900px;
+            background: linear-gradient(135deg, #d8b4fe, #a855f7, #f0abfc, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: move-glow 8s ease-in-out infinite;
         }
 
         .hero p {
-            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
             color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto 2.5rem auto;
+            margin: 0 auto 3rem auto;
             line-height: 1.6;
+            opacity: 0;
+            animation: fade-in-up 0.8s 0.3s ease-out forwards;
         }
-        
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fade-in-up 0.8s 0.6s ease-out forwards;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
+        }
+
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
         .image-showcase-wrapper {
-            margin-top: 4rem;
+            margin-top: 6rem;
+            perspective: 1000px;
         }
 
         .image-showcase {
-            border-radius: 12px;
-            background: linear-gradient(to bottom, #1e1e1e, #141414);
-            padding: 1rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid var(--border-color);
+            margin: 2rem auto;
+            max-width: 600px;
+            width: 100%;
+            padding: 1.5rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transform: rotateX(15deg) rotateY(0deg);
-            transition: transform 0.5s ease;
+            transition: all 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
         }
 
         .image-showcase:hover {
-            transform: rotateX(0deg) rotateY(0deg) scale(1.02);
+            transform: rotateX(10deg) rotateY(5deg) scale(1.02);
         }
 
         .browser-header {
             display: flex;
             align-items: center;
             padding-bottom: 1rem;
+            gap: 0.5rem;
         }
 
         .browser-dot {
@@ -234,7 +336,6 @@
             height: 12px;
             border-radius: 50%;
             background: #444;
-            margin-right: 8px;
         }
 
         .browser-dot.red { background: #ff5f56; }
@@ -244,88 +345,125 @@
         .browser-content img {
             width: 100%;
             display: block;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .agent-showcase {
-            padding: 4rem 0;
+            padding: 6rem 0;
         }
         
         .agent-showcase h2 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 800;
-            margin-bottom: 4rem;
-            background: linear-gradient(90deg, #d8b4fe, #a855f7, #f0abfc);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #d8b4fe, #a855f7, #f0abfc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        .agent-showcase p {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            animation: fade-in-up 0.8s 0.2s ease-out forwards;
         }
 
         .agent-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
-        }
-
-        .agent-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            text-decoration: none;
-            color: var(--text-bright);
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, opacity 0.6s ease-out;
-            opacity: 0;
-            position: relative;
-            overflow: hidden;
+            margin-top: 3rem;
         }
         
+        .agent-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        .agent-card:nth-child(1) { animation-delay: 0.1s; }
+        .agent-card:nth-child(2) { animation-delay: 0.2s; }
+        .agent-card:nth-child(3) { animation-delay: 0.3s; }
+        .agent-card:nth-child(4) { animation-delay: 0.4s; }
+        .agent-card:nth-child(5) { animation-delay: 0.5s; }
+        .agent-card:nth-child(6) { animation-delay: 0.6s; }
+        .agent-card:nth-child(7) { animation-delay: 0.7s; }
+
         .agent-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 0;
-            background-repeat: no-repeat;
-            transition: opacity 0.3s ease-in-out;
-        }
-        
-        .agent-card > * {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .agent-card-1::before { background-image: radial-gradient(circle at top left, rgba(168, 85, 247, 0.1), transparent 40%); }
-        .agent-card-2::before { background-image: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 40%); }
-        .agent-card-3::before { background-image: radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1), transparent 40%); }
-        .agent-card-4::before { background-image: radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.08), transparent 40%); }
-        .agent-card-5::before { background-image: radial-gradient(circle at top, rgba(74, 222, 128, 0.08), transparent 40%); }
-        .agent-card-6::before { background-image: radial-gradient(circle at bottom, rgba(251, 146, 60, 0.08), transparent 40%); }
-        .agent-card-7::before { background-image: radial-gradient(circle at left, rgba(168, 85, 247, 0.1), transparent 40%); }
-
-        .agent-card.custom-card:hover {
-            border-color: var(--button-bg);
-            background-color: rgba(168, 85, 247, 0.1);
-        }
-
-        .agent-card.custom-card {
-            border-style: dashed;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .agent-card-content {
-            display: flex;
-            flex-direction: column;
+            left: -100%;
+            width: 100%;
             height: 100%;
-            justify-content: space-between;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .agent-card:hover::before {
+            left: 100%;
+        }
+        
+        .agent-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.2);
+        }
+        
+        .agent-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .agent-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .agent-card .arrow {
+            margin-top: 1.5rem;
+            align-self: flex-end;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .agent-card:hover .arrow {
+            transform: translateX(5px);
+            color: #a855f7;
+        }
+
+        .custom-card {
+            border-style: dashed;
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(168, 85, 247, 0.05);
+        }
+
+        .custom-card:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: #a855f7;
         }
 
         .agent-actions {
@@ -344,7 +482,7 @@
         }
 
         .chat-btn:hover {
-            color: rgba(34, 211, 238, 0.8);
+            color: #a855f7;
         }
 
         .action-buttons {
@@ -369,92 +507,25 @@
         }
 
         .edit-btn:hover {
-            background-color: rgba(34, 211, 238, 0.1);
-            border-color: rgba(34, 211, 238, 0.3);
-            color: rgba(34, 211, 238, 0.8);
+            background-color: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.3);
+            color: #a855f7;
             transform: translateY(-1px);
         }
 
         .delete-btn:hover {
             background-color: rgba(220, 38, 38, 0.1);
             border-color: rgba(220, 38, 38, 0.3);
-            color: rgba(220, 38, 38, 0.8);
+            color: #dc2626;
             transform: translateY(-1px);
         }
 
-        @keyframes gradient-glow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .agent-card.premium-card {
-            position: relative;
-            border-color: transparent;
-            z-index: 1;
-        }
-
-        .agent-card.premium-card::before {
-            content: '';
-            position: absolute;
-            top: -1px; 
-            left: -1px;
-            z-index: -1;
-            width: calc(100% + 2px);
-            height: calc(100% + 2px);
-            background: linear-gradient(60deg, rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.3), rgba(236, 72, 153, 0.3), rgba(34, 211, 238, 0.3));
-            background-size: 400% 400%;
-            border-radius: 17px;
-            animation: gradient-glow 6s ease-in-out infinite;
-        }
-
-        .agent-card.premium-card:hover {
-            transform: translateY(-8px);
-            border-color: transparent;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
-        }
-
-        .agent-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(168, 85, 247, 0.5);
-            background-color: rgba(28, 28, 28, 0.5);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.1);
-        }
-
-        .agent-name {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .agent-description {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-
-        .agent-card .arrow {
-            margin-top: 1.5rem;
-            align-self: flex-end;
-            font-size: 1.5rem;
-            color: var(--text-secondary);
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        .agent-card:hover .arrow {
-            transform: translateX(5px);
-            color: var(--text-primary);
-        }
-        
         footer {
-            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding: 3rem 0;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: 6rem;
+            margin-top: 4rem;
         }
 
         .footer-content {
@@ -469,6 +540,11 @@
         .footer-links-group {
             display: flex;
             gap: 5rem;
+        }
+
+        .footer-column {
+            margin: 0 1rem;
+            padding: 1rem;
         }
 
         .footer-column h3 {
@@ -493,7 +569,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 0.75rem 2rem;
         }
-        
+
         .footer-horizontal-links {
             display: flex;
             gap: 1.5rem;
@@ -508,7 +584,7 @@
         .footer-column a:hover {
             color: var(--text-primary);
         }
-        
+
         .social-icons {
             display: flex;
             gap: 1rem;
@@ -519,7 +595,7 @@
             font-size: 1.5rem;
             transition: color 0.2s ease, transform 0.2s ease;
         }
-        
+
         .social-icons a:hover {
             color: var(--text-primary);
             transform: scale(1.1);
@@ -534,7 +610,7 @@
             align-items: center;
             font-size: 0.9rem;
         }
-
+        
         @media (max-width: 768px) {
             nav { display: none; }
             .hero { padding: 4rem 0; }
@@ -544,12 +620,19 @@
             .footer-content {
                 flex-direction: column;
             }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .agent-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 480px) {
              .footer-content {
-                flex-direction: column;
-            }
+                 flex-direction: column;
+             }
         }
 
     </style>
@@ -575,13 +658,19 @@
 
         <main>
             <div class="container">
-                <section class="hero">
-                    <div class="hero-content scroll-animate">
-                        <h1>Meet Your Specialist AI Agents</h1>
-                        <p>One platform, five specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
-                        {% if not session.user %}
-                            <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
-                        {% endif %}
+                <section id="hero" class="hero">
+                    <div class="scroll-animate">
+                        <h1>Your AI Team, Ready to Work</h1>
+                        <p>Choose from specialized AI agents or create your own. Get expert assistance for any task, from creative writing to code generation.</p>
+                        <div class="hero-buttons">
+                            {% if session.user %}
+                                <a href="#agents" class="primary-btn">Choose Your Agent</a>
+                                <a href="{{ url_for('custom_agent') }}" class="secondary-btn">Create Custom Agent</a>
+                            {% else %}
+                                <a href="{{ url_for('login') }}" class="primary-btn">Get Started</a>
+                                <a href="#showcase" class="secondary-btn">See How It Works</a>
+                            {% endif %}
+                        </div>
                     </div>
                     <div id="showcase" class="image-showcase-wrapper scroll-animate">
                         <div class="image-showcase">
