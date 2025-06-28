@@ -563,16 +563,6 @@
             }
         }
 
-        .glass-footer {
-            background: rgba(30, 30, 40, 0.7);
-            border-top: 1.5px solid rgba(168, 85, 247, 0.25);
-            box-shadow: 0 -8px 32px 0 rgba(31, 38, 135, 0.18);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: 2rem 2rem 0 0;
-            margin-top: 4rem;
-        }
-
     </style>
 </head>
 <body>
@@ -600,7 +590,9 @@
                     <div class="hero-content scroll-animate">
                         <h1>Meet Your Specialist AI Agents</h1>
                         <p>One platform, five specialized AI agents. From creative writing to code generation, get expert assistance tailored to your needs.</p>
-                        <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
+                        {% if not session.user %}
+                            <a href="{{ url_for('login') }}" class="cta-button" style="padding: 1rem 2.5rem; font-size: 1rem;">Login to Select Agent</a>
+                        {% endif %}
                     </div>
                     <div id="showcase" class="image-showcase-wrapper scroll-animate">
                         <div class="image-showcase">
@@ -615,6 +607,8 @@
                         </div>
                     </div>
                 </section>
+
+                {% if session.user %}
                 <section id="agents" class="agent-showcase">
                     <h2 class="scroll-animate">Choose Your Agent</h2>
                     <div class="agent-grid">
@@ -680,10 +674,11 @@
                         {% endfor %}
                     </div>
                 </section>
+                {% endif %}
             </div>
         </main>
 
-        <footer class="scroll-animate glass-footer">
+        <footer class="scroll-animate">
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-column">
