@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
     <style>
         :root {
             --bg: #000000;
@@ -35,7 +36,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text-primary);
             margin: 0;
@@ -57,6 +58,18 @@
             background-size: 300% 300%;
             animation: move-glow 30s ease-in-out infinite;
             filter: blur(100px);
+        }
+
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
         }
 
         .container {
@@ -188,19 +201,20 @@
         }
         
         .agent-card-preview {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            text-decoration: none;
-            color: var(--text-bright);
+            background: rgba(30, 30, 40, 0.7);
+            border: 1.5px solid rgba(168, 85, 247, 0.25);
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            transition: transform 0.5s cubic-bezier(.23,1.01,.32,1), box-shadow 0.3s, opacity 0.8s cubic-bezier(.23,1.01,.32,1);
+            will-change: transform;
+            animation: floatCard 4s ease-in-out infinite alternate;
+            padding: 2.2rem 2rem 2rem 2rem;
             display: flex;
             flex-direction: column;
             text-align: left;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.4s ease;
-            height: 250px;
+            height: 220px;
             justify-content: space-between;
         }
         
@@ -275,10 +289,29 @@
                 display: none;
             }
         }
+
+        .form-content, .preview-pane, .agent-card-preview {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(.23,1.01,.32,1), transform 0.8s cubic-bezier(.23,1.01,.32,1);
+        }
+        .form-content.in-view, .preview-pane.in-view, .agent-card-preview.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @keyframes floatCard {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-16px) scale(1.03); }
+        }
+        .agent-card-preview:hover {
+            transform: translateY(-8px) scale(1.03) rotateZ(-1deg);
+            box-shadow: 0 0 40px 0 rgba(168,85,247,0.18);
+        }
     </style>
 </head>
 <body>
     <div class="background-glow"></div>
+    <div class="cursor-glow"></div>
     <header class="header">
         <div class="logo">Dreamline</div>
         <a href="{{ url_for('index') }}" class="back-nav">← Back to Agents</a>
@@ -320,16 +353,38 @@
             </div>
         </div>
     </div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // AOS scroll animations
+            AOS.init({ duration: 900, once: true });
+
+            // Cursor Glow Effect
+            const glow = document.querySelector('.cursor-glow');
+            if (glow) {
+                document.addEventListener('mousemove', (e) => {
+                    glow.style.left = e.clientX + 'px';
+                    glow.style.top = e.clientY + 'px';
+                });
+            }
+
+            // Animate form and preview on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.form-content, .preview-pane, .agent-card-preview').forEach(el => observer.observe(el));
+
+            // Existing preview update JS
             const agentNameInput = document.getElementById('agent_name');
             const agentNamePreview = document.getElementById('agent-name-preview');
-
             function updatePreview() {
                 const name = agentNameInput.value.trim();
                 agentNamePreview.textContent = name ? name : 'Your Agent Name';
             }
-
             agentNameInput.addEventListener('input', updatePreview);
         });
     </script>

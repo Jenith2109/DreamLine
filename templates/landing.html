@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
     <style>
         :root {
             --bg: #000000;
@@ -30,7 +31,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text-primary);
             margin: 0;
@@ -54,12 +55,12 @@
 
         .cursor-glow {
             position: fixed;
-            width: 500px;
-            height: 500px;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
             pointer-events: none;
-            z-index: -1;
+            z-index: 1000;
             transform: translate(-50%, -50%);
             transition: opacity 0.3s ease;
         }
@@ -177,10 +178,21 @@
         .scroll-animate {
             opacity: 0;
             transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transition: opacity 0.8s cubic-bezier(.23,1.01,.32,1), transform 0.8s cubic-bezier(.23,1.01,.32,1);
         }
         
         .scroll-animate.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hero h1, .hero p, .cta-button, .agent-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(.23,1.01,.32,1), transform 0.8s cubic-bezier(.23,1.01,.32,1);
+        }
+        
+        .hero .in-view, .cta-button.in-view, .agent-card.in-view {
             opacity: 1;
             transform: translateY(0);
         }
@@ -269,21 +281,22 @@
         }
 
         .agent-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            text-decoration: none;
-            color: var(--text-bright);
+            background: rgba(30, 30, 40, 0.7);
+            border: 1.5px solid rgba(168, 85, 247, 0.25);
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            transition: transform 0.5s cubic-bezier(.23,1.01,.32,1), box-shadow 0.3s, opacity 0.8s cubic-bezier(.23,1.01,.32,1);
+            will-change: transform;
+            animation: floatCard 4s ease-in-out infinite alternate;
+            padding: 2.2rem 2rem 2rem 2rem;
             display: flex;
             flex-direction: column;
             text-align: left;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, opacity 0.6s ease-out;
+            height: 220px;
+            justify-content: space-between;
             opacity: 0;
-            position: relative;
-            overflow: hidden;
         }
         
         .agent-card::before {
@@ -415,10 +428,8 @@
         }
 
         .agent-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(168, 85, 247, 0.5);
-            background-color: rgba(28, 28, 28, 0.5);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.1);
+            transform: translateY(-8px) scale(1.03) rotateZ(-1deg);
+            box-shadow: 0 0 40px 0 rgba(168,85,247,0.18);
         }
 
         .agent-name {
@@ -715,17 +726,11 @@
             </div>
         </footer>
     </div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Smooth scrolling for nav links
-            document.querySelectorAll('nav a').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
+            // AOS scroll animations
+            AOS.init({ duration: 900, once: true });
 
             // Cursor Glow Effect
             const glow = document.querySelector('.cursor-glow');
@@ -736,41 +741,32 @@
                 });
             }
 
-            // Scroll-triggered Animations
+            // Animate hero and agent cards on scroll
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('in-view');
                     }
                 });
-            }, {
-                threshold: 0.1,
-            });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.hero h1, .hero p, .cta-button, .agent-card').forEach(el => observer.observe(el));
 
-            const elementsToAnimate = document.querySelectorAll('.scroll-animate');
-            elementsToAnimate.forEach((element, index) => {
-                let delay = 0;
-                if (element.classList.contains('agent-card')) {
-                    delay = index * 100;
-                } else if (element.classList.contains('footer-column')) {
-                    delay = index * 150;
-                }
-                element.style.transitionDelay = `${delay}ms`;
-                observer.observe(element);
-            });
-            
-            // 3D Showcase Effect
+            // 3D Showcase Effect (Linear.app style)
             const showcase = document.querySelector('.image-showcase');
             if (showcase) {
+                let timeout;
                 document.body.addEventListener('mousemove', e => {
                     const { clientX, clientY } = e;
                     const { innerWidth, innerHeight } = window;
-                    const x = (clientX - innerWidth / 2) / innerWidth;
-                    const y = (clientY - innerHeight / 2) / innerHeight;
-                    
-                    if(showcase.classList.contains('in-view')) {
-                       showcase.style.transform = `rotateX(${y * -30}deg) rotateY(${x * 30}deg) scale(1.02)`;
-                    }
+                    const x = (clientX - innerWidth / 2) / (innerWidth / 2);
+                    const y = (clientY - innerHeight / 2) / (innerHeight / 2);
+                    showcase.classList.add('in-motion');
+                    showcase.style.transform = `rotateX(${15 - y * 12}deg) rotateY(${-18 + x * 24}deg) scale(1.04)`;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        showcase.classList.remove('in-motion');
+                        showcase.style.transform = 'rotateX(15deg) rotateY(-18deg) scale(1.04)';
+                    }, 1200);
                 });
             }
         });

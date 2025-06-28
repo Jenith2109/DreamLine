@@ -2,11 +2,13 @@
 <html>
 <head>
     <title>DreamLine</title>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', 'Roboto', sans-serif;
+            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
             background: #0d0d0d;
             color: #e4e4e7;
             height: 100vh;
@@ -20,14 +22,17 @@
         }
         .sidebar {
             width: 90px;
-            background: #111111;
+            background: rgba(22, 22, 22, 0.7);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            border-right: 1.5px solid rgba(168, 85, 247, 0.15);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
             padding: 24px 0 24px 0;
             box-sizing: border-box;
-            border-right: 1px solid #262626;
         }
         .sidebar .logo {
             font-weight: 500;
@@ -83,8 +88,10 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            background: #0d0d0d;
+            background: rgba(13, 13, 13, 0.85);
             overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            backdrop-filter: blur(8px);
         }
         .topbar {
             width: 100%;
@@ -146,6 +153,15 @@
             padding-top: 60px;
             box-sizing: border-box;
         }
+        .greeting, .subheading, .suggestion-card, .chat-bubble {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(.23,1.01,.32,1), transform 0.8s cubic-bezier(.23,1.01,.32,1);
+        }
+        .greeting.in-view, .subheading.in-view, .suggestion-card.in-view, .chat-bubble.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
         .greeting {
             font-size: 3.2rem;
             font-weight: bold;
@@ -170,9 +186,12 @@
             max-width: 900px;
         }
         .suggestion-card {
-            background: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 12px;
+            background: rgba(30, 30, 40, 0.7);
+            border: 1.5px solid rgba(168, 85, 247, 0.15);
+            border-radius: 1.2rem;
+            box-shadow: 0 4px 20px rgba(31, 38, 135, 0.10);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 1.2rem;
             cursor: pointer;
             transition: all 0.2s;
@@ -180,8 +199,10 @@
             color: #a1a1aa;
         }
         .suggestion-card:hover {
-            border-color: #52525b;
-            background: #27272a;
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.08);
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 0 24px 0 rgba(168,85,247,0.10);
         }
         .chat-history-container {
             flex-grow: 1;
@@ -213,22 +234,23 @@
         .chat-row.ai {
             justify-content: flex-start;
         }
-        .bubble {
-            padding: 12px 18px;
-            border-radius: 22px;
-            max-width: 75%;
-            font-size: 0.95rem;
-            line-height: 1.5;
+        .chat-bubble {
+            margin-bottom: 1rem;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.1rem;
+            color: #f0f0f0;
+            max-width: 80%;
+            word-break: break-word;
         }
-        .bubble.user {
-            background-color: #3b82f6;
-            color: white;
-            border-bottom-right-radius: 6px;
+        .chat-bubble.user {
+            align-self: flex-end;
+            background: rgba(99, 102, 241, 0.18);
+            border-color: #6366f1;
         }
-        .bubble.ai {
-            background-color: #37373d;
-            color: #e2e2e6;
-            border-bottom-left-radius: 6px;
+        .chat-bubble.ai {
+            align-self: flex-start;
+            background: rgba(168, 85, 247, 0.13);
+            border-color: #a855f7;
         }
         .avatar {
             width: 32px;
@@ -476,6 +498,29 @@
                 filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.5)) drop-shadow(0 0 25px rgba(168, 85, 247, 0.3)) drop-shadow(0 0 35px rgba(168, 85, 247, 0.1));
             }
         }
+        .background-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 25% 35%, #6366f1 0%, transparent 40%), radial-gradient(circle at 75% 65%, #a855f7 0%, transparent 40%), radial-gradient(circle at 80% 20%, #ec4899 0%, transparent 35%);
+            background-size: 300% 300%;
+            animation: move-glow 30s ease-in-out infinite;
+            filter: blur(100px);
+        }
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -582,6 +627,9 @@
             </div>
         </div>
     </div>
+    <div class="background-glow"></div>
+    <div class="cursor-glow"></div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Auto-resize textarea
@@ -667,6 +715,29 @@
                 }
             });
         }
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        // AOS scroll animations
+        AOS.init({ duration: 900, once: true });
+
+        // Cursor Glow Effect
+        const glow = document.querySelector('.cursor-glow');
+        if (glow) {
+            document.addEventListener('mousemove', (e) => {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+            });
+        }
+
+        // Animate greeting, suggestions, and chat bubbles on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.greeting, .subheading, .suggestion-card, .chat-bubble').forEach(el => observer.observe(el));
     });
     </script>
 </body>
