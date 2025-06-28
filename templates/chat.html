@@ -514,6 +514,7 @@
                     <img src="{{ session['user']['picture'] }}" alt="User Avatar">
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="{{ url_for('profile') }}">Profile</a>
                     <a href="{{ url_for('index') }}">Switch Agent</a>
                     <a href="/logout">Logout</a>
                 </div>

@@ -374,6 +374,13 @@ def new_chat():
     
     return redirect(url_for("chat"))
 
+@app.route("/profile")
+def profile():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    user_info = session["user"]
+    return render_template("profile.html", user=user_info)
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
 
