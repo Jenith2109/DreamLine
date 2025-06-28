@@ -59,74 +59,19 @@
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem 1rem 4rem 1rem;
+            padding: 2rem;
             z-index: 1;
-            display: flex;
-            flex-direction: column;
+        }
+        
+        .creator-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
             align-items: center;
-        }
-        
-        .creator-vertical {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2.5rem;
-            margin-top: 6rem;
-            width: 100%;
-            animation: fade-in-up 1s cubic-bezier(.23,1.01,.32,1) forwards;
-        }
-        
-        .form-content {
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-            background: rgba(22, 22, 22, 0.5);
-            border-radius: 2rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-            padding: 2.5rem 2rem 2rem 2rem;
-            backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(168, 85, 247, 0.15);
-        }
-        
-        .preview-pane {
-            width: 100%;
-            max-width: 420px;
-            perspective: 1500px;
-            margin: 0 auto;
-        }
-        
-        .agent-card-preview {
-            background: rgba(30, 30, 40, 0.7);
-            border: 1.5px solid rgba(168, 85, 247, 0.25);
-            border-radius: 2rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            transition: transform 0.5s cubic-bezier(.23,1.01,.32,1), box-shadow 0.3s;
-            will-change: transform;
-            animation: floatCard 4s ease-in-out infinite alternate;
-            padding: 2.2rem 2rem 2rem 2rem;
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            height: 220px;
-            justify-content: space-between;
-        }
-        @keyframes floatCard {
-            0% { transform: translateY(0px) scale(1); }
-            100% { transform: translateY(-16px) scale(1.03); }
-        }
-        @media (max-width: 600px) {
-            .form-content, .preview-pane {
-                max-width: 98vw;
-                padding: 1.2rem;
-            }
-            .agent-card-preview {
-                padding: 1.2rem;
-                height: 180px;
-            }
+            opacity: 0;
+            animation: fade-in-up 0.8s 0.2s ease-out forwards;
         }
         
         .form-content h1 {
@@ -220,6 +165,27 @@
         }
 
         /* Preview Card Styles */
+        .preview-pane {
+            perspective: 1500px;
+        }
+        
+        .agent-card-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-bright);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease;
+            height: 250px;
+            justify-content: space-between;
+        }
+        
         .agent-name-preview {
             font-size: 1.5rem;
             font-weight: 600;
@@ -282,6 +248,15 @@
         .back-nav:hover {
             color: var(--text-primary);
         }
+        
+        @media (max-width: 900px) {
+            .creator-grid {
+                grid-template-columns: 1fr;
+            }
+            .preview-pane {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -291,7 +266,7 @@
         <a href="{{ url_for('index') }}" class="back-nav">← Back to Agents</a>
     </header>
     <div class="container">
-        <div class="creator-vertical">
+        <div class="creator-grid">
             <div class="form-content">
                 <h1>Design Your Agent</h1>
                 <p>Build a specialist AI by giving it a name and defining its unique personality, purpose, and expertise. Be as creative and detailed as you want.</p>
